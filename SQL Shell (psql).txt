@@ -1,0 +1,3843 @@
+Server [localhost]:
+Database [postgres]: restaurante
+Port [5432]:
+Username [postgres]:
+Senha para usuário postgres:
+
+psql (16.1)
+AVISO: página de código do Console (850) difere da página de código do Windows (1252)
+         caracteres de 8 bits podem não funcionar corretamente. Veja páginade
+         referência do psql "Notes for Windows users" para obter detalhes.
+Digite "help" para ajuda.
+
+restaurante=#
+restaurante=# \ss
+invalid command \ss
+Try \? for help.
+restaurante=# \d
+             Lista de relaþ§es
+ Esquema |     Nome     |  Tipo  |   Dono
+---------+--------------+--------+----------
+ public  | comissoes    | tabela | postgres
+ public  | funcionarios | tabela | postgres
+ public  | itens_vendas | tabela | postgres
+ public  | mesas        | tabela | postgres
+ public  | produtos     | tabela | postgres
+ public  | vendas       | tabela | postgres
+(6 registros)
+
+
+restaurante=# \d vendas
+                                     Tabela "public.vendas"
+      Coluna      |            Tipo             | Collation | Nullable |    Default
+------------------+-----------------------------+-----------+----------+------------------------
+ id               | integer                     |           | not null |
+ funcionario_id   | integer                     |           |          |
+ mesa_id          | integer                     |           |          |
+ venda_codigo     | character varying(20)       |           |          |
+ venda_valor      | real                        |           |          |
+ venda_total      | real                        |           |          |
+ venda_desconto   | real                        |           |          |
+ venda_situacao   | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "vendas_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de chave estrangeira:
+    "vendas_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+    "vendas_mesa_id_fkey" FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_vendas_id_fkey" FOREIGN KEY (vendas_id) REFERENCES vendas(id)
+
+
+restaurante=# create table
+restaurante-#
+restaurante-#
+restaurante-# drop table comissoes
+restaurante-# \d
+             Lista de relaþ§es
+ Esquema |     Nome     |  Tipo  |   Dono
+---------+--------------+--------+----------
+ public  | comissoes    | tabela | postgres
+ public  | funcionarios | tabela | postgres
+ public  | itens_vendas | tabela | postgres
+ public  | mesas        | tabela | postgres
+ public  | produtos     | tabela | postgres
+ public  | vendas       | tabela | postgres
+(6 registros)
+
+
+restaurante-# \d drop table
+Did not find any relation named "drop".
+restaurante-# drop table comissoes;
+ERRO:  erro de sintaxe em ou próximo a "table"
+LINHA 2: drop table comissoes
+              ^
+restaurante=# drop table comissoes;
+DROP TABLE
+restaurante=# \d comissoes
+                                    Tabela "public.comissoes"
+      Coluna       |            Tipo             | Collation | Nullable |     Default
+-------------------+-----------------------------+-----------+----------+------------------------
+ id                | integer                     |           | not null |
+ funcionario_id    | integer                     |           |          |
+ comissao_valor    | real                        |           |          |
+ comissao_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+
+
+restaurante=# alter table comissoes add constraint comissoes_pkey primary ke
+y(id);
+ALTER TABLE
+restaurante=# \d comissoes
+                                    Tabela "public.comissoes"
+      Coluna       |            Tipo             | Collation | Nullable |     Default
+-------------------+-----------------------------+-----------+----------+------------------------
+ id                | integer                     |           | not null |
+ funcionario_id    | integer                     |           |          |
+ comissao_valor    | real                        |           |          |
+ comissao_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+═ndices:
+    "comissoes_pkey" PRIMARY KEY, btree (id)
+
+
+restaurante=# \d vendas
+                                     Tabela "public.vendas"
+      Coluna      |            Tipo             | Collation | Nullable |    Default
+------------------+-----------------------------+-----------+----------+------------------------
+ id               | integer                     |           | not null |
+ funcionario_id   | integer                     |           |          |
+ mesa_id          | integer                     |           |          |
+ venda_codigo     | character varying(20)       |           |          |
+ venda_valor      | real                        |           |          |
+ venda_total      | real                        |           |          |
+ venda_desconto   | real                        |           |          |
+ venda_situacao   | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "vendas_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de chave estrangeira:
+    "vendas_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+    "vendas_mesa_id_fkey" FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_vendas_id_fkey" FOREIGN KEY (vendas_id) REFERENCES vendas(id)
+
+
+restaurante=# \d comissoes
+                                    Tabela "public.comissoes"
+      Coluna       |            Tipo             | Collation | Nullable |     Default
+-------------------+-----------------------------+-----------+----------+------------------------
+ id                | integer                     |           | not null |
+ funcionario_id    | integer                     |           |          |
+ comissao_valor    | real                        |           |          |
+ comissao_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+═ndices:
+    "comissoes_pkey" PRIMARY KEY, btree (id)
+
+
+restaurante=# alter table comissoes add foreign key (funcionario_id) referen
+ces funcionarios(id);
+ALTER TABLE
+restaurante=# \d comissoes
+                                    Tabela "public.comissoes"
+      Coluna       |            Tipo             | Collation | Nullable |     Default
+-------------------+-----------------------------+-----------+----------+------------------------
+ id                | integer                     |           | not null |
+ funcionario_id    | integer                     |           |          |
+ comissao_valor    | real                        |           |          |
+ comissao_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+═ndices:
+    "comissoes_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de chave estrangeira:
+    "comissoes_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCESfuncionarios(id)
+
+
+restaurante=# \d vendas
+                                     Tabela "public.vendas"
+      Coluna      |            Tipo             | Collation | Nullable |    Default
+------------------+-----------------------------+-----------+----------+------------------------
+ id               | integer                     |           | not null |
+ funcionario_id   | integer                     |           |          |
+ mesa_id          | integer                     |           |          |
+ venda_codigo     | character varying(20)       |           |          |
+ venda_valor      | real                        |           |          |
+ venda_total      | real                        |           |          |
+ venda_desconto   | real                        |           |          |
+ venda_situacao   | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "vendas_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de chave estrangeira:
+    "vendas_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+    "vendas_mesa_id_fkey" FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_vendas_id_fkey" FOREIGN KEY (vendas_id) REFERENCES vendas(id)
+
+
+restaurante=# alter table vendas add check (venda_total > 0);
+ALTER TABLE
+restaurante=# \d vendas
+                                     Tabela "public.vendas"
+      Coluna      |            Tipo             | Collation | Nullable |    Default
+------------------+-----------------------------+-----------+----------+------------------------
+ id               | integer                     |           | not null |
+ funcionario_id   | integer                     |           |          |
+ mesa_id          | integer                     |           |          |
+ venda_codigo     | character varying(20)       |           |          |
+ venda_valor      | real                        |           |          |
+ venda_total      | real                        |           |          |
+ venda_desconto   | real                        |           |          |
+ venda_situacao   | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "vendas_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de verificaþÒo:
+    "vendas_venda_total_check" CHECK (venda_total > 0::double precision)
+Restriþ§es de chave estrangeira:
+    "vendas_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+    "vendas_mesa_id_fkey" FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_vendas_id_fkey" FOREIGN KEY (vendas_id) REFERENCES vendas(id)
+
+
+restaurante=# alter table funcionarios add check (funcionario_nome <> null);
+
+ALTER TABLE
+restaurante=# \d vendas
+                                     Tabela "public.vendas"
+      Coluna      |            Tipo             | Collation | Nullable |    Default
+------------------+-----------------------------+-----------+----------+------------------------
+ id               | integer                     |           | not null |
+ funcionario_id   | integer                     |           |          |
+ mesa_id          | integer                     |           |          |
+ venda_codigo     | character varying(20)       |           |          |
+ venda_valor      | real                        |           |          |
+ venda_total      | real                        |           |          |
+ venda_desconto   | real                        |           |          |
+ venda_situacao   | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "vendas_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de verificaþÒo:
+    "vendas_venda_total_check" CHECK (venda_total > 0::double precision)
+Restriþ§es de chave estrangeira:
+    "vendas_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+    "vendas_mesa_id_fkey" FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_vendas_id_fkey" FOREIGN KEY (vendas_id) REFERENCES vendas(id)
+
+
+restaurante=# \d funcionarios
+                                    Tabela "public.funcionarios"
+        Coluna        |            Tipo             | Collation | Nullable |        Default
+----------------------+-----------------------------+-----------+----------+------------------------
+ id                   | integer                     |           | not null |
+
+ funcionario_codigo   | character varying(20)       |           |          |
+
+ funcionario_nome     | character varying(100)      |           |          |
+
+ funcionario_situacao | character varying(1)        |           |          | 'A'::character varying
+ funcionario_comissao | real                        |           |          |
+
+ funcionario_cargo    | character varying(30)       |           |          |
+
+ data_criacao         | timestamp without time zone |           |          |
+
+ data_atualizacao     | timestamp without time zone |           |          |
+
+═ndices:
+    "funcionarios_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de verificaþÒo:
+    "funcionarios_funcionario_nome_check" CHECK (funcionario_nome::text <> NULL::text)
+Referenciada por:
+    TABLE "comissoes" CONSTRAINT "comissoes_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+    TABLE "vendas" CONSTRAINT "vendas_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+
+
+restaurante=# create sequence mesa_id_seq;
+CREATE SEQUENCE
+restaurante=# create sequence vendas_id_seq;
+CREATE SEQUENCE
+restaurante=#
+restaurante=# create sequence itens_vendas_id_seq;
+CREATE SEQUENCE
+restaurante=# create sequence produtos_id_seq;
+CREATE SEQUENCE
+restaurante=#
+restaurante=# create sequence funcionario_id_seq;
+CREATE SEQUENCE
+restaurante=# create sequence comissoes_id_seq;
+CREATE SEQUENCE
+restaurante=# \d comissoes
+                                    Tabela "public.comissoes"
+      Coluna       |            Tipo             | Collation | Nullable |     Default
+-------------------+-----------------------------+-----------+----------+------------------------
+ id                | integer                     |           | not null |
+ funcionario_id    | integer                     |           |          |
+ comissao_valor    | real                        |           |          |
+ comissao_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+═ndices:
+    "comissoes_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de chave estrangeira:
+    "comissoes_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCESfuncionarios(id)
+
+
+restaurante=# \
+invalid command \
+Try \? for help.
+restaurante=# \?
+Geral
+  \bind [PARAM]...       set query parameters
+  \copyright             mostra termos de uso e distribuiþÒo do PostgreSQL
+  \crosstabview [COLUMNS] execute query and display result in crosstab
+  \errverbose            mostra mensagem de erro mais recente com detalhamento mßximo
+  \g [(OPTIONS)] [FILE]  execute query (and send result to file or |pipe);
+                         \g with no arguments is equivalent to a semicolon
+  \gdesc                 describe result of query, without executing it
+  \gexec                 executa consulta, em seguida, executa cada valor no seu resultado
+  \gset [PREFIX]         execute query and store result in psql variables
+  \gx [(OPTIONS)] [FILE] as \g, but forces expanded output mode
+  \q                     sair do psql
+  \watch [[i=]SEC] [c=N] execute query every SEC seconds, up to N times
+
+Ajuda
+  \? [commands]          mostra ajuda sobre comandos de barra invertida
+  \? options             mostra ajuda sobre opþ§es de linha de comando do psql
+  \? variables           mostra ajuda sobre varißveis especiais
+  \h [NOME]              mostra sintaxe dos comandos SQL, * para todos os comandos
+
+Buffer de consulta
+  \e [ARQUIVO] [LINHA]    edita o buffer de consulta (ou arquivo) com um editor externo
+  \ef [NOMEFUNÃ├O [LINHA]] edita a definiþÒo de funþÒo com um editor externo  \ev [NOMEVIS├O [LINHA]] edita a definiþÒo de visÒo com um editor externo
+  \p                     mostra o conte·do do buffer de consulta
+  \r                     reinicia (apaga) o buffer de consulta
+  \w [ARQUIVO]           escreve o buffer de consulta para arquivo
+
+Entrada/SaÝda
+  \copy ...              realiza comando SQL COPY dos dados para mßquina cliente
+  \echo [-n] [STRING]    write string to standard output (-n for no newline)  \i ARQUIVO             executa comandos de um arquivo
+  \ir ARQUIVO            como \i, mas relativo ao local do script atual
+  \o [ARQUIVO]           envia todos os resultados da consulta para arquivoou |pipe
+  \qecho [-n] [STRING]   write string to \o output stream (-n for no newline)
+  \warn [-n] [STRING]    write string to standard error (-n for no newline)
+
+Conditional
+  \if EXPR               begin conditional block
+  \elif EXPR             alternative within current conditional block
+  \else                  final alternative within current conditional block
+  \endif                 end conditional block
+
+Informativo
+  (opþ§es: S = mostra objetos do sistema, + = detalhes)
+  \d[S+]                 lista tabelas, vis§es e sequÛncias
+  \d[S+]  NOME           descreve tabela, visÒo, sequÛncia ou Ýndice
+  \da[S]  [MODELO]       lista funþ§es de agregaþÒo
+  \dA[+]  [MODELO]       lista mÚtodos de acesso
+  \dAc[+] [AMPTRN [TYPEPTRN]]  list operator classes
+  \dAf[+] [AMPTRN [TYPEPTRN]]  list operator families
+  \dAo[+] [AMPTRN [OPFPTRN]]   list operators of operator families
+  \dAp[+] [AMPTRN [OPFPTRN]]   list support functions of operator families
+  \db[+]  [MODELO]       lista tablespaces
+  \dc[S+]  [MODELO]      lista convers§es
+  \dconfig[+] [PATTERN]  list configuration parameters
+  \dC[+]  [MODELO]       lista convers§es de tipos
+  \dd[S]  [MODELO]       mostra comentßrios de objetos que nÒo aparecem em outro lugar
+  \dD[S+] [MODELO]       lista domÝnios
+  \ddp    [MODELO]       lista privilÚgios padrÒo
+  \dE[S+] [MODELO]       lista tabelas externas
+  \des[+] [MODELO]       lista servidores externos
+  \det[+] [MODELO]       lista tabelas externas
+  \deu[+] [MODELO]       lista mapeamento de usußrios
+  \dew[+] [MODELO]       lista adaptadores de dados externos
+  \df[anptw][S+] [FUNCPTRN [TYPEPTRN ...]]
+                         list [only agg/normal/procedure/trigger/window] functions
+  \dF[+]  [MODELO]       lista configuraþ§es de busca textual
+  \dFd[+] [MODELO]       lista dicionßrios de busca textual
+  \dFp[+] [MODELO]       lista analisadores de busca textual
+  \dFt[+] [MODELO]       lista modelos de busca textual
+  \dg[S+] [MODELO]       lista roles
+  \di[S+] [MODELO]       lista Ýndices
+  \dl[+]                 list large objects, same as \lo_list
+  \dL[S+] [MODELO]       lista linguagens procedurais
+  \dm[S+] [MODELO]       lista vis§es materializadas
+  \dn[S+] [MODELO]       lista esquemas
+  \do[S+] [OPPTRN [TYPEPTRN [TYPEPTRN]]]
+                         list operators
+  \dO[S+] [MODELO]       lista ordenaþ§es
+  \dp[S]  [PATTERN]      list table, view, and sequence access privileges
+  \dP[itn+] [PATTERN]    list [only index/table] partitioned relations [n=nested]
+  \drds [ROLEPTRN [DBPTRN]] list per-database role settings
+  \drg[S] [PATTERN]      list role grants
+  \dRp[+] [PATTERN]      list replication publications
+  \dRs[+] [PATTERN]      list replication subscriptions
+  \ds[S+] [MODELO]       lista sequÛncias
+  \dt[S+] [MODELO]       lista tabelas
+  \dT[S+] [MODELO]       lista tipos de dados
+  \du[S+] [MODELO]       lista roles
+  \dv[S+] [MODELO]       lista vis§es
+  \dx[+]  [MODELO]       lista extens§es
+  \dX     [PATTERN]      list extended statistics
+  \dy[+]  [PATTERN]      list event triggers
+  \l[+]   [MODELO]       lista bancos de dados
+  \sf[+]  NOMEFUNÃ├O     edita a definiþÒo da funþÒo
+  \sv[+]  NOMEVIS├O      edita a definiþÒo da visÒo
+  \z[S]   [PATTERN]      same as \dp
+
+Objetos Grandes
+  \lo_export LOBOID FILE write large object to file
+  \lo_import FILE [COMMENT]
+                         read large object from file
+  \lo_list[+]            list large objects
+  \lo_unlink LOBOID      delete a large object
+
+FormataþÒo
+  \a                     alterna entre modo de saÝda desalinhado e alinhado
+  \C [TEXTO]             define o tÝtulo da tabela, ou apaga caso nada sejaespecificado
+  \f [TEXTO]             mostra ou define separador de campos para saÝda deconsulta desalinhada
+  \H                     alterna para modo de saÝda em HTML (atual desabilitado)
+  \pset [NAME [VALUE]]   set table output option
+                         (border|columns|csv_fieldsep|expanded|fieldsep|
+                         fieldsep_zero|footer|format|linestyle|null|
+                         numericlocale|pager|pager_min_lines|recordsep|
+                         recordsep_zero|tableattr|title|tuples_only|
+                         unicode_border_linestyle|unicode_column_linestyle|
+                         unicode_header_linestyle)
+  \t [on|off]            mostra somente registros (atual desabilitado)
+  \T [TEXTO]             define atributos do marcador HTML <table> ou apagacaso nada seja especificado
+  \x [on|off|auto]       alterna para saÝda expandida (atual desabilitado)
+
+ConexÒo
+  \c[onnect] {[NOMEBD|- USU┴RIO|- M┴QUINA|- PORTA|-] | conninfo}
+                         conecta a um novo banco de dados (atualmente "restaurante")
+  \conninfo              mostra informaþÒo sobre conexÒo atual
+  \encoding [CODIFICAÃ├O] mostra ou define codificaþÒo do cliente
+  \password [USU┴RIO]    altera a senha de um usußrio com seguranþa
+
+Sistema Operacional
+  \cd [DIRETËRIO]        muda o diret¾rio de trabalho atual
+  \getenv PSQLVAR ENVVAR fetch environment variable
+  \setenv NOME [VALOR]   define ou apaga varißvel de ambiente
+  \timing [on|off]       alterna para duraþÒo da execuþÒo de comandos (atualmente desabilitado)
+  \! [COMANDO]           executa comando na shell ou inicia shell interativa
+Varißveis
+  \prompt [TEXTO] NOME   pergunta o usußrio ao definir uma varißvel interna
+  \set [NOME [VALOR]]    define varißvel interna ou lista todos caso nÒo tenha parÔmetros
+  \unset NOME            apaga (exclui) varißvel interna
+
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# alter table mesas alter column id set default nextval('mesa_id
+_seq');
+ALTER TABLE
+restaurante=# \d mesas
+                                          Tabela "public.mesas"
+      Coluna      |            Tipo             | Collation | Nullable |         Default
+------------------+-----------------------------+-----------+----------+----------------------------------
+ id               | integer                     |           | not null | nextval('mesa_id_seq'::regclass)
+ mesa_codigo      | character varying(20)       |           |          |
+ mesa_situacao    | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "mesas_pkey" PRIMARY KEY, btree (id)
+Referenciada por:
+    TABLE "vendas" CONSTRAINT "vendas_mesa_id_fkey" FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+
+
+restaurante=# alter table vendas alter column id set default nextval('vendas_id_seq');
+ALTER TABLE
+restaurante=# alter table itens_vendas alter column id set default nextval('
+itens_vendas_id_seq');
+ALTER TABLE
+restaurante=#
+restaurante=# alter table produtos alter column id set default nextval('produtos_id_seq');
+ALTER TABLE
+restaurante=# alter table funcionarios alter column id set default nextval('
+funcionario_id_seq');
+ALTER TABLE
+restaurante=# alter table comissoes alter column id set default nextval('comissoes_id_seq');
+ALTER TABLE
+restaurante=# \d comissoes
+                                           Tabela "public.comissoes"
+      Coluna       |            Tipo             | Collation | Nullable |             Default
+-------------------+-----------------------------+-----------+----------+---------------------------------------
+ id                | integer                     |           | not null | nextval('comissoes_id_seq'::regclass)
+ funcionario_id    | integer                     |           |          |
+ comissao_valor    | real                        |           |          |
+ comissao_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+═ndices:
+    "comissoes_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de chave estrangeira:
+    "comissoes_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCESfuncionarios(id)
+
+
+restaurante=# create sequence proximo_numero;
+CREATE SEQUENCE
+restaurante=# drop sequence proximo_numero;
+DROP SEQUENCE
+restaurante=# alter table comissoes add column data_pagamento int;
+ALTER TABLE
+restaurante=# \d comissoes
+                                           Tabela "public.comissoes"
+      Coluna       |            Tipo             | Collation | Nullable |             Default
+-------------------+-----------------------------+-----------+----------+---------------------------------------
+ id                | integer                     |           | not null | nextval('comissoes_id_seq'::regclass)
+ funcionario_id    | integer                     |           |          |
+ comissao_valor    | real                        |           |          |
+ comissao_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+ data_pagamento    | integer                     |           |          |
+═ndices:
+    "comissoes_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de chave estrangeira:
+    "comissoes_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCESfuncionarios(id)
+
+
+restaurante=# alter table comissoes alter column data_pagamento type timesta
+mp using data_pagamento_timestamp;
+ERRO:  coluna "data_pagamento_timestamp" não existe
+LINHA 1: ... alter column data_pagamento type timestamp using data_pagam...
+                                                              ^
+restaurante=# alter table comissoes alter column data_pagamento type timestamp using data_pagamento;
+ERRO:  result of USING clause for column "data_pagamento" cannot be cast automatically to type timestamp without time zone
+DICA:  You might need to add an explicit cast.
+restaurante=# alter table comissoes alter column data_pagamento type timestamp using data_pagamento_timestamp;
+ERRO:  coluna "data_pagamento_timestamp" não existe
+LINHA 1: ... alter column data_pagamento type timestamp using data_pagam...
+                                                              ^
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# \d comissoes
+                                           Tabela "public.comissoes"
+      Coluna       |            Tipo             | Collation | Nullable |             Default
+-------------------+-----------------------------+-----------+----------+---------------------------------------
+ id                | integer                     |           | not null | nextval('comissoes_id_seq'::regclass)
+ funcionario_id    | integer                     |           |          |
+ comissao_valor    | real                        |           |          |
+ comissao_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+ data_pagamento    | integer                     |           |          |
+═ndices:
+    "comissoes_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de chave estrangeira:
+    "comissoes_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCESfuncionarios(id)
+
+
+restaurante=# alter table comissoes alter column data_pagamento type timestamp;
+ERRO:  coluna "data_pagamento" não pode ser convertida automaticamente paratipo timestamp without time zone
+DICA:  You might need to specify "USING data_pagamento::timestamp without time zone".
+restaurante=# alter table comissoes alter column data_pagamento type timestamp using data_pagamento::timestamp;
+ERRO:  não pode converter tipo integer para timestamp without time zone
+LINHA 1: ...data_pagamento type timestamp using data_pagamento::timestam...
+                                                              ^
+restaurante=# alter table comissoes alter column data_pagamento type timestamp using data_pagamento_timestamp;
+ERRO:  coluna "data_pagamento_timestamp" não existe
+LINHA 1: ... alter column data_pagamento type timestamp using data_pagam...
+                                                              ^
+restaurante=# alter table comissoes alter column data_pagamento type timestamp without time zone using data_pagamento_timestamp;
+ERRO:  coluna "data_pagamento_timestamp" não existe
+LINHA 1: ..._pagamento type timestamp without time zone using data_pagam...
+                                                              ^
+restaurante=# alter table comissoes alter column data_pagamento type timestamp without time zone using data_pagamento;
+ERRO:  result of USING clause for column "data_pagamento" cannot be cast automatically to type timestamp without time zone
+DICA:  You might need to add an explicit cast.
+restaurante=# alter table comissoes alter column data_pagamento type timestamp without time zone using data_pagamento_timestamp;
+ERRO:  coluna "data_pagamento_timestamp" não existe
+LINHA 1: ..._pagamento type timestamp without time zone using data_pagam...
+                                                              ^
+restaurante=# alter table comissoes alter column data_pagamento type timestamp without time zone using data_pagamento::timestamp;
+ERRO:  não pode converter tipo integer para timestamp without time zone
+LINHA 1: ...e timestamp without time zone using data_pagamento::timestam...
+                                                              ^
+restaurante=# alter table comissoes alter column data_pagamento type timestamp without time zone using data_pagamento_timestamp;
+ERRO:  coluna "data_pagamento_timestamp" não existe
+LINHA 1: ..._pagamento type timestamp without time zone using data_pagam...
+                                                              ^
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# alter table comissoes alter column data_pagamento type timestamp without time zone using data_pagamento_timestamp;
+ERRO:  coluna "data_pagamento_timestamp" não existe
+LINHA 1: ..._pagamento type timestamp without time zone using data_pagam...
+                                                              ^
+restaurante=# alter table comissoes alter column data_pagamento type timestamp without time zone using data_pagamento::timestamp;
+ERRO:  não pode converter tipo integer para timestamp without time zone
+LINHA 1: ...e timestamp without time zone using data_pagamento::timestam...
+                                                              ^
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# alter table comissoes alter column data_pagamento type timestamp without time zone using data_pagamento::timestamp;
+ERRO:  não pode converter tipo integer para timestamp without time zone
+LINHA 1: ...e timestamp without time zone using data_pagamento::timestam...
+                                                              ^
+restaurante=# alter table comissoes drop column data_pagamento;
+ALTER TABLE
+restaurante=# alter table comissoes add column data_pagamento timestamp;
+ALTER TABLE
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# insert into mesas (mesa_codigo, mesa_situacao, data_criacao, data_atualizacao) values ('00001','A','01/01/2024','01/01/2024');
+INSERT 0 1
+restaurante=# insert into mesas (mesa_codigo, mesa_situacao, data_criacao, data_atualizacao) values ('00002','A','01/01/2024','01/01/2024');
+INSERT 0 1
+restaurante=# \d mesas
+                                          Tabela "public.mesas"
+      Coluna      |            Tipo             | Collation | Nullable |         Default
+------------------+-----------------------------+-----------+----------+----------------------------------
+ id               | integer                     |           | not null | nextval('mesa_id_seq'::regclass)
+ mesa_codigo      | character varying(20)       |           |          |
+ mesa_situacao    | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "mesas_pkey" PRIMARY KEY, btree (id)
+Referenciada por:
+    TABLE "vendas" CONSTRAINT "vendas_mesa_id_fkey" FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+
+
+restaurante=# \?
+Geral
+  \bind [PARAM]...       set query parameters
+  \copyright             mostra termos de uso e distribuiþÒo do PostgreSQL
+  \crosstabview [COLUMNS] execute query and display result in crosstab
+  \errverbose            mostra mensagem de erro mais recente com detalhamento mßximo
+  \g [(OPTIONS)] [FILE]  execute query (and send result to file or |pipe);
+                         \g with no arguments is equivalent to a semicolon
+  \gdesc                 describe result of query, without executing it
+  \gexec                 executa consulta, em seguida, executa cada valor no seu resultado
+  \gset [PREFIX]         execute query and store result in psql variables
+  \gx [(OPTIONS)] [FILE] as \g, but forces expanded output mode
+  \q                     sair do psql
+  \watch [[i=]SEC] [c=N] execute query every SEC seconds, up to N times
+
+Ajuda
+  \? [commands]          mostra ajuda sobre comandos de barra invertida
+  \? options             mostra ajuda sobre opþ§es de linha de comando do psql
+  \? variables           mostra ajuda sobre varißveis especiais
+  \h [NOME]              mostra sintaxe dos comandos SQL, * para todos os comandos
+
+Buffer de consulta
+  \e [ARQUIVO] [LINHA]    edita o buffer de consulta (ou arquivo) com um editor externo
+  \ef [NOMEFUNÃ├O [LINHA]] edita a definiþÒo de funþÒo com um editor externo  \ev [NOMEVIS├O [LINHA]] edita a definiþÒo de visÒo com um editor externo
+  \p                     mostra o conte·do do buffer de consulta
+  \r                     reinicia (apaga) o buffer de consulta
+  \w [ARQUIVO]           escreve o buffer de consulta para arquivo
+
+Entrada/SaÝda
+  \copy ...              realiza comando SQL COPY dos dados para mßquina cliente
+  \echo [-n] [STRING]    write string to standard output (-n for no newline)  \i ARQUIVO             executa comandos de um arquivo
+  \ir ARQUIVO            como \i, mas relativo ao local do script atual
+  \o [ARQUIVO]           envia todos os resultados da consulta para arquivorestaurante=# select * from mesas;
+ id | mesa_codigo | mesa_situacao |    data_criacao     |  data_atualizacao
+
+----+-------------+---------------+---------------------+---------------------
+  1 | 00001       | A             | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 00002       | A             | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(2 registros)
+
+
+restaurante=# insert into funcionarios(funcionario_codigo, funcionario_nome, funcionario_situacao, funcionario_comissao, funcionario_cargo, data_criacao) values ('0001', 'Adauto Moisés', 'A', 5, 'GERENTE', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into funcionarios(funcionario_codigo, funcionario_nome, funcionario_situacao, funcionario_comissao, funcionario_cargo, data_criacao) values ('0002', 'Rafael Aires', 'A', 2, 'GARÇOM', '01/01/2024');
+INSERT 0 1
+restaurante=# select * from funcionarios;
+ id | funcionario_codigo | funcionario_nome | funcionario_situacao | funcionario_comissao | funcionario_cargo |    data_criacao     | data_atualizacao
+----+--------------------+------------------+----------------------+----------------------+-------------------+---------------------+------------------
+  1 | 0001               | Adauto Moisés    | A                    |            5 | GERENTE           | 2024-01-01 00:00:00 |
+  2 | 0002               | Rafael Aires     | A                    |            2 | GARÇOM            | 2024-01-01 00:00:00 |
+(2 registros)
+
+
+restaurante=# insert intos produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_cricao, data_atualizacao) values ('001', 'REFRIGERANTE', 10, 'A', '01/01/2024', '01/01/2024');
+ERRO:  erro de sintaxe em ou próximo a "intos"
+LINHA 1: insert intos produtos (produto_codigo, produto_nome, produto...
+                ^
+restaurante=# insert into produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_cricao, data_atualizacao) values ('002', 'AGUA',
+ 3, 'A', '01/01/2024', '01/01/2024');
+ERRO:  coluna "data_cricao" da relação "produtos" não existe
+LINHA 1: ...o, produto_nome, produto_valor, produto_situacao, data_crica...
+                                                              ^
+restaurante=# insert intos produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_criacao, data_atualizacao) values ('001', 'REFR
+IGERANTE', 10, 'A', '01/01/2024', '01/01/2024');
+ERRO:  erro de sintaxe em ou próximo a "intos"
+LINHA 1: insert intos produtos (produto_codigo, produto_nome, produto...
+                ^
+restaurante=# insert into produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_criacao, data_atualizacao) values ('001', 'REFRIGERANTE', 10, 'A', '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=#
+restaurante=# insert into produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_criacao, data_atualizacao) values ('002', 'AGUA'
+, 3, 'A', '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_criacao, data_atualizacao) values ('003', 'PASTE
+L', 7, 'A', '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into vendas (funcionario_id, mesa_id, venda_codigo, venda_valor, venda_total, venda_desconto, venda_situacao, data_criacao, data_atualizacao) values (2, 1, '0001', '20', '20', '0', 'A', '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into vendas (funcionario_id, mesa_id, venda_codigo, venda_valor, venda_total, venda_desconto, venda_situacao, data_criacao, data_atualizacao) values (2, 2, '0002', '21', '21', '0', 'A', '01/01/2024', '01/01/
+2024');
+INSERT 0 1
+restaurante=# insert into itens_vendas (produto_id, vendas_id, item_valor, item_quantidade, item_total, data_criacao, data_atualizacao) values (1,1,10,2,20,'01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into itens_vendas (produto_id, vendas_id, item_valor, item_quantidade, item_total, data_criacao, data_atualizacao) values (1,2,7,3,
+21,'01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# select * from mesas;
+ id | mesa_codigo | mesa_situacao |    data_criacao     |  data_atualizacao
+
+----+-------------+---------------+---------------------+---------------------
+  1 | 00001       | A             | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 00002       | A             | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(2 registros)
+
+
+restaurante=# select mesa_codigo, data_criacao from mesas;
+ mesa_codigo |    data_criacao
+-------------+---------------------
+ 00001       | 2024-01-01 00:00:00
+ 00002       | 2024-01-01 00:00:00
+(2 registros)
+
+
+restaurante=# select * from mesas where mesa_codigo = '00002';
+ id | mesa_codigo | mesa_situacao |    data_criacao     |  data_atualizacao
+
+----+-------------+---------------+---------------------+---------------------
+  2 | 00002       | A             | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(1 registro)
+
+
+restaurante=# select * from mesas where mesa_codigo = '0002';
+ id | mesa_codigo | mesa_situacao | data_criacao | data_atualizacao
+----+-------------+---------------+--------------+------------------
+(0 registro)
+
+
+restaurante=# select * from mesas where mesa_codigo = '00002';
+ id | mesa_codigo | mesa_situacao |    data_criacao     |  data_atualizacao
+
+----+-------------+---------------+---------------------+---------------------
+  2 | 00002       | A             | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(1 registro)
+
+
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome | produto_valor | produto_situacao |data_criacao     |  data_atualizacao
+----+----------------+--------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA         |             3 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL       |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(3 registros)
+
+
+restaurante=# select * from produtos
+restaurante-# select * from produtos;
+ERRO:  erro de sintaxe em ou próximo a "select"
+LINHA 2: select * from produtos;
+         ^
+restaurante=# update produtos set produto_valor = 4 where id = 2;
+UPDATE 1
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome | produto_valor | produto_situacao |data_criacao     |  data_atualizacao
+----+----------------+--------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL       |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA         |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(3 registros)
+
+
+restaurante=# update produtos set data_criacao = '01/01/2025';
+UPDATE 3
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome | produto_valor | produto_situacao |data_criacao     |  data_atualizacao
+----+----------------+--------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE |            10 | A                | 2025-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL       |             7 | A                | 2025-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA         |             4 | A                | 2025-01-01 00:00:00 | 2024-01-01 00:00:00
+(3 registros)
+
+
+restaurante=# update produtos set data_criacao = '01/01/2024';
+UPDATE 3
+restaurante=# \d mesas
+                                          Tabela "public.mesas"
+      Coluna      |            Tipo             | Collation | Nullable |         Default
+------------------+-----------------------------+-----------+----------+----------------------------------
+ id               | integer                     |           | not null | nextval('mesa_id_seq'::regclass)
+ mesa_codigo      | character varying(20)       |           |          |
+ mesa_situacao    | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "mesas_pkey" PRIMARY KEY, btree (id)
+Referenciada por:
+    TABLE "vendas" CONSTRAINT "vendas_mesa_id_fkey" FOREIGN KEY (mesa_id) REFERENCES mesas(id)
+
+
+restaurante=# select * from mesas;
+ id | mesa_codigo | mesa_situacao |    data_criacao     |  data_atualizacao
+
+----+-------------+---------------+---------------------+---------------------
+  1 | 00001       | A             | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 00002       | A             | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(2 registros)
+
+
+restaurante=# delete from mesas where id = 2;
+ERRO:  atualização ou exclusão em tabela "mesas" viola restrição de chave estrangeira "vendas_mesa_id_fkey" em "vendas"
+DETALHE:  Chave (id)=(2) ainda é referenciada pela tabela "vendas".
+restaurante=# \?
+Geral
+  \bind [PARAM]...       set query parameters
+  \copyright             mostra termos de uso e distribuiþÒo do PostgreSQL
+  \crosstabview [COLUMNS] execute query and display result in crosstab
+  \errverbose            mostra mensagem de erro mais recente com detalhamento mßximo
+  \g [(OPTIONS)] [FILE]  execute query (and send result to file or |pipe);
+                         \g with no arguments is equivalent to a semicolon
+  \gdesc                 describe result of query, without executing it
+  \gexec                 executa consulta, em seguida, executa cada valor no seu resultado
+  \gset [PREFIX]         execute query and store result in psql variables
+  \gx [(OPTIONS)] [FILE] as \g, but forces expanded output mode
+  \q                     sair do psql
+  \watch [[i=]SEC] [c=N] execute query every SEC seconds, up to N times
+
+Ajuda
+  \? [commands]          mostra ajuda sobre comandos de barra invertida
+  \? options             mostra ajuda sobre opþ§es de linha de comando do psql
+  \? variables           mostra ajuda sobre varißveis especiais
+  \h [NOME]              mostra sintaxe dos comandos SQL, * para todos os comandos
+
+Buffer de consulta
+  \e [ARQUIVO] [LINHA]    edita o buffer de consulta (ou arquivo) com um editor externo
+  \ef [NOMEFUNÃ├O [LINHA]] edita a definiþÒo de funþÒo com um editor externo  \ev [NOMEVIS├O [LINHA]] edita a definiþÒo de visÒo com um editor externo
+  \p                     mostra o conte·do do buffer de consulta
+  \r                     reinicia (apaga) o buffer de consulta
+  \w [ARQUIVO]           escreve o buffer de consulta para arquivo
+
+Entrada/SaÝda
+  \copy ...              realiza comando SQL COPY dos dados para mßquina cliente
+  \echo [-n] [STRING]    write string to standard output (-n for no newline)  \i ARQUIVO             executa comandos de um arquivo
+  \ir ARQUIVO            como \i, mas relativo ao local do script atual
+  \o [ARQUIVO]           envia todos os resultados da consulta para arquivoou |pipe
+  \qecho [-n] [STRING]   write string to \o output stream (-n for no newline)
+  \warn [-n] [STRING]    write string to standard error (-n for no newline)
+
+Conditional
+  \if EXPR               begin conditional block
+  \elif EXPR             alternative within current conditional block
+  \else                  final alternative within current conditional block
+  \endif                 end conditional block
+
+Informativo
+  (opþ§es: S = mostra objetos do sistema, + = detalhes)
+  \d[S+]                 lista tabelas, vis§es e sequÛncias
+  \d[S+]  NOME           descreve tabela, visÒo, sequÛncia ou Ýndice
+  \da[S]  [MODELO]       lista funþ§es de agregaþÒo
+  \dA[+]  [MODELO]       lista mÚtodos de acesso
+  \dAc[+] [AMPTRN [TYPEPTRN]]  list operator classes
+  \dAf[+] [AMPTRN [TYPEPTRN]]  list operator families
+  \dAo[+] [AMPTRN [OPFPTRN]]   list operators of operator families
+  \dAp[+] [AMPTRN [OPFPTRN]]   list support functions of operator families
+  \db[+]  [MODELO]       lista tablespaces
+  \dc[S+]  [MODELO]      lista convers§es
+  \dconfig[+] [PATTERN]  list configuration parameters
+  \dC[+]  [MODELO]       lista convers§es de tipos
+  \dd[S]  [MODELO]       mostra comentßrios de objetos que nÒo aparecem em outro lugar
+  \dD[S+] [MODELO]       lista domÝnios
+  \ddp    [MODELO]       lista privilÚgios padrÒo
+  \dE[S+] [MODELO]       lista tabelas externas
+  \des[+] [MODELO]       lista servidores externos
+  \det[+] [MODELO]       lista tabelas externas
+  \deu[+] [MODELO]       lista mapeamento de usußrios
+  \dew[+] [MODELO]       lista adaptadores de dados externos
+  \df[anptw][S+] [FUNCPTRN [TYPEPTRN ...]]
+                         list [only agg/normal/procedure/trigger/window] functions
+  \dF[+]  [MODELO]       lista configuraþ§es de busca textual
+  \dFd[+] [MODELO]       lista dicionßrios de busca textual
+  \dFp[+] [MODELO]       lista analisadores de busca textual
+  \dFt[+] [MODELO]       lista modelos de busca textual
+  \dg[S+] [MODELO]       lista roles
+  \di[S+] [MODELO]       lista Ýndices
+  \dl[+]                 list large objects, same as \lo_list
+  \dL[S+] [MODELO]       lista linguagens procedurais
+  \dm[S+] [MODELO]       lista vis§es materializadas
+  \dn[S+] [MODELO]       lista esquemas
+  \do[S+] [OPPTRN [TYPEPTRN [TYPEPTRN]]]
+                         list operators
+  \dO[S+] [MODELO]       lista ordenaþ§es
+  \dp[S]  [PATTERN]      list table, view, and sequence access privileges
+  \dP[itn+] [PATTERN]    list [only index/table] partitioned relations [n=nested]
+  \drds [ROLEPTRN [DBPTRN]] list per-database role settings
+  \drg[S] [PATTERN]      list role grants
+  \dRp[+] [PATTERN]      list replication publications
+  \dRs[+] [PATTERN]      list replication subscriptions
+  \ds[S+] [MODELO]       lista sequÛncias
+  \dt[S+] [MODELO]       lista tabelas
+  \dT[S+] [MODELO]       lista tipos de dados
+  \du[S+] [MODELO]       lista roles
+  \dv[S+] [MODELO]       lista vis§es
+  \dx[+]  [MODELO]       lista extens§es
+  \dX     [PATTERN]      list extended statistics
+  \dy[+]  [PATTERN]      list event triggers
+  \l[+]   [MODELO]       lista bancos de dados
+  \sf[+]  NOMEFUNÃ├O     edita a definiþÒo da funþÒo
+  \sv[+]  NOMEVIS├O      edita a definiþÒo da visÒo
+  \z[S]   [PATTERN]      same as \dp
+
+Objetos Grandes
+  \lo_export LOBOID FILE write large object to file
+  \lo_import FILE [COMMENT]
+                         read large object from file
+  \lo_list[+]            list large objects
+  \lo_unlink LOBOID      delete a large object
+
+FormataþÒo
+  \a                     alterna entre modo de saÝda desalinhado e alinhado
+  \C [TEXTO]             define o tÝtulo da tabela, ou apaga caso nada sejaespecificado
+  \f [TEXTO]             mostra ou define separador de campos para saÝda deconsulta desalinhada
+  \H                     alterna para modo de saÝda em HTML (atual desabilitado)
+  \pset [NAME [VALUE]]   set table output option
+                         (border|columns|csv_fieldsep|expanded|fieldsep|
+                         fieldsep_zero|footer|format|linestyle|null|
+                         numericlocale|pager|pager_min_lines|recordsep|
+                         recordsep_zero|tableattr|title|tuples_only|
+                         unicode_border_linestyle|unicode_column_linestyle|
+                         unicode_header_linestyle)
+  \t [on|off]            mostra somente registros (atual desabilitado)
+  \T [TEXTO]             define atributos do marcador HTML <table> ou apagacaso nada seja especificado
+  \x [on|off|auto]       alterna para saÝda expandida (atual desabilitado)
+
+ConexÒo
+  \c[onnect] {[NOMEBD|- USU┴RIO|- M┴QUINA|- PORTA|-] | conninfo}
+                         conecta a um novo banco de dados (atualmente "restaurante")
+  \conninfo              mostra informaþÒo sobre conexÒo atual
+  \encoding [CODIFICAÃ├O] mostra ou define codificaþÒo do cliente
+  \password [USU┴RIO]    altera a senha de um usußrio com seguranþa
+
+Sistema Operacional
+  \cd [DIRETËRIO]        muda o diret¾rio de trabalho atual
+  \getenv PSQLVAR ENVVAR fetch environment variable
+  \setenv NOME [VALOR]   define ou apaga varißvel de ambiente
+  \timing [on|off]       alterna para duraþÒo da execuþÒo de comandos (atualmente desabilitado)
+  \! [COMANDO]           executa comando na shell ou inicia shell interativa
+Varißveis
+  \prompt [TEXTO] NOME   pergunta o usußrio ao definir uma varißvel interna
+  \set [NOME [VALOR]]    define varißvel interna ou lista todos caso nÒo tenha parÔmetros
+  \unset NOME            apaga (exclui) varißvel interna
+
+restaurante=#
+restaurante=#
+restaurante=# \?
+Geral
+  \bind [PARAM]...       set query parameters
+  \copyright             mostra termos de uso e distribuiþÒo do PostgreSQL
+  \crosstabview [COLUMNS] execute query and display result in crosstab
+  \errverbose            mostra mensagem de erro mais recente com detalhamento mßximo
+  \g [(OPTIONS)] [FILE]  execute query (and send result to file or |pipe);
+                         \g with no arguments is equivalent to a semicolon
+  \gdesc                 describe result of query, without executing it
+  \gexec                 executa consulta, em seguida, executa cada valor no seu resultado
+  \gset [PREFIX]         execute query and store result in psql variables
+  \gx [(OPTIONS)] [FILE] as \g, but forces expanded output mode
+  \q                     sair do psql
+  \watch [[i=]SEC] [c=N] execute query every SEC seconds, up to N times
+
+Ajuda
+  \? [commands]          mostra ajuda sobre comandos de barra invertida
+  \? options             mostra ajuda sobre opþ§es de linha de comando do psql
+  \? variables           mostra ajuda sobre varißveis especiais
+  \h [NOME]              mostra sintaxe dos comandos SQL, * para todos os comandos
+
+Buffer de consulta
+  \e [ARQUIVO] [LINHA]    edita o buffer de consulta (ou arquivo) com um editor externo
+  \ef [NOMEFUNÃ├O [LINHA]] edita a definiþÒo de funþÒo com um editor externo  \ev [NOMEVIS├O [LINHA]] edita a definiþÒo de visÒo com um editor externo
+  \p                     mostra o conte·do do buffer de consulta
+  \r                     reinicia (apaga) o buffer de consulta
+  \w [ARQUIVO]           escreve o buffer de consulta para arquivo
+
+Entrada/SaÝda
+  \copy ...              realiza comando SQL COPY dos dados para mßquina cliente
+  \echo [-n] [STRING]    write string to standard output (-n for no newline)  \i ARQUIVO             executa comandos de um arquivo
+  \ir ARQUIVO            como \i, mas relativo ao local do script atual
+  \o [ARQUIVO]           envia todos os resultados da consulta para arquivorestaurante=# \p
+delete from mesas where id = 2;
+restaurante=# \?
+Geral
+  \bind [PARAM]...       set query parameters
+  \copyright             mostra termos de uso e distribuiþÒo do PostgreSQL
+  \crosstabview [COLUMNS] execute query and display result in crosstab
+  \errverbose            mostra mensagem de erro mais recente com detalhamento mßximo
+  \g [(OPTIONS)] [FILE]  execute query (and send result to file or |pipe);
+                         \g with no arguments is equivalent to a semicolon
+  \gdesc                 describe result of query, without executing it
+  \gexec                 executa consulta, em seguida, executa cada valor no seu resultado
+  \gset [PREFIX]         execute query and store result in psql variables
+  \gx [(OPTIONS)] [FILE] as \g, but forces expanded output mode
+  \q                     sair do psql
+  \watch [[i=]SEC] [c=N] execute query every SEC seconds, up to N times
+
+Ajuda
+  \? [commands]          mostra ajuda sobre comandos de barra invertida
+  \? options             mostra ajuda sobre opþ§es de linha de comando do psql
+  \? variables           mostra ajuda sobre varißveis especiais
+  \h [NOME]              mostra sintaxe dos comandos SQL, * para todos os comandos
+
+Buffer de consulta
+  \e [ARQUIVO] [LINHA]    edita o buffer de consulta (ou arquivo) com um editor externo
+  \ef [NOMEFUNÃ├O [LINHA]] edita a definiþÒo de funþÒo com um editor externo  \ev [NOMEVIS├O [LINHA]] edita a definiþÒo de visÒo com um editor externo
+  \p                     mostra o conte·do do buffer de consulta
+  \r                     reinicia (apaga) o buffer de consulta
+  \w [ARQUIVO]           escreve o buffer de consulta para arquivo
+
+Entrada/SaÝda
+  \copy ...              realiza comando SQL COPY dos dados para mßquina cliente
+  \echo [-n] [STRING]    write string to standard output (-n for no newline)  \i ARQUIVO             executa comandos de um arquivo
+  \ir ARQUIVO            como \i, mas relativo ao local do script atual
+  \o [ARQUIVO]           envia todos os resultados da consulta para arquivorestaurante=# create or replace function retorna_nome_funcionario(func_id int) returns text as $$ declare nome text; situacao text; begin select funcion
+ario_nome, funcionario_situacao into nome, situacao from funcionarios where
+id = func_id; if situacao = 'A' then return nome || ' Usuário Ativo'; else r
+eturn nome || ' Usuário Inativo'; end if; end $$ language plpgsql;
+CREATE FUNCTION
+restaurante=# select retorna_nome_funcionario(1);
+  retorna_nome_funcionario
+-----------------------------
+ Adauto Moisés Usuário Ativo
+(1 registro)
+
+
+restaurante=# select retorna_nome_funcionario(2);
+  retorna_nome_funcionario
+----------------------------
+ Rafael Aires Usuário Ativo
+(1 registro)
+
+
+restaurante=# select retorna_nome_funcionario(3);
+ retorna_nome_funcionario
+--------------------------
+
+(1 registro)
+
+
+restaurante=# create or replace function rt_valor_comissao(func_id int) retu
+rns real as $$ declare valor_comissao real; begin select funcionario_comissa
+o into valor_comissao from funcionarios where id = func_id; return valor_com
+issao; end $$ language plpgsql;
+CREATE FUNCTION
+restaurante=# select rt_valor_comissao(1);
+ rt_valor_comissao
+-------------------
+                 5
+(1 registro)
+
+
+restaurante=# select rt_valor_comissao(2);
+ rt_valor_comissao
+-------------------
+                 2
+(1 registro)
+
+
+restaurante=# select rt_valor_comissao(3);
+ rt_valor_comissao
+-------------------
+
+(1 registro)
+
+
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# create or replace function calc_comissao (data_ini timestamp,
+data_fim timestamp) returns void as $$ declare total_comissao real := 0; por
+c_comissao real := 0;
+restaurante$# create or replace function calc_comissao (data_ini timestamp,data_fim timestamp) returns void as $$ declare total_comissao real := 0; porc_comissao real := 0;
+ERRO:  erro de sintaxe em ou próximo a "declare"
+LINHA 2: ...timestamp, data_fim timestamp) returns void as $$ declare to...
+                                                              ^
+ERRO:  erro de sintaxe em ou próximo a "porc_comissao"
+LINHA 1: porc_comissao real := 0;
+         ^
+restaurante=# create or replace function calc_comissao (data_ini timestamp,data_fim timestamp) returns void as $$ declare total_comissao real := 0; porc_comissao real := 0;
+restaurante$# select * from
+restaurante$# funcionarios;
+restaurante$# select * from
+restaurante$# select * from funcionarios
+restaurante$# create or replace function calc_comissao (data_ini timestamp,data_fim timestamp) returns void as $$ declare total_comissao real := 0; porc_comissao real := 0; reg record;
+ERRO:  erro de sintaxe em ou próximo a "declare"
+LINHA 6: ...timestamp, data_fim timestamp) returns void as $$ declare to...
+                                                              ^
+ERRO:  erro de sintaxe em ou próximo a "porc_comissao"
+LINHA 1: porc_comissao real := 0;
+         ^
+ERRO:  erro de sintaxe em ou próximo a "reg"
+LINHA 1: reg record;
+         ^
+restaurante=# create or replace function calc_comissao (data_ini timestamp,data_fim timestamp) returns void as $$ declare total_comissao real := 0; porc_comissao real := 0; reg record; cr_porce CURSOR (func_id int) IS select rt
+_valor_comissao(func_id); begin for reg in(select vendas.id id, funcionario_
+id, venda_total from vendas where data_criacao >= data_ini and data_criacao
+<= data_fim and venda_situacao = 'A')loop open cr_porce(reg.funcionario_id);
+ fetch cr_porce into porc_comissao; close cr_porce; total_comissao := (reg.v
+enda_total * porc_comissao)/100; insert into comissoes(funcionario_id, comissao_valor, comissao_situacao, data_criacao, data_atualizacao) values (reg.funcionario_id, total_comissao, 'A',, now(), now()); update vendas set venda_s
+ituacao == 'C' where id = reg.id; total_comissao := 0; porc_comissao := 0; e
+nd loop; end $$ language plpgsql;
+ERRO:  erro de sintaxe em ou próximo a ","
+LINHA 1: ...) values (reg.funcionario_id, total_comissao, 'A',, now(), n...
+                                                              ^
+restaurante=# create or replace function calc_comissao (data_ini timestamp,data_fim timestamp) returns void as $$ declare total_comissao real := 0; porc_comissao real := 0; reg record; cr_porce CURSOR (func_id int) IS select rt_valor_comissao(func_id); begin for reg in(select vendas.id id, funcionario_id, venda_total from vendas where data_criacao >= data_ini and data_criacao<= data_fim and venda_situacao = 'A')loop open cr_porce(reg.funcionario_id); fetch cr_porce into porc_comissao; close cr_porce; total_comissao := (reg.venda_total * porc_comissao)/100; insert into comissoes(funcionario_id, comissao_valor, comissao_situacao, data_criacao, data_atualizacao) values (reg.funcionario_id, total_comissao, 'A', now(), now()); update vendas set venda_situacao == 'C' where id = reg.id; total_comissao := 0; porc_comissao := 0; end loop; end $$ language plpgsql;
+ERRO:  erro de sintaxe em ou próximo a "=="
+LINHA 1: ..., now(), now()); update vendas set venda_situacao == 'C' whe...
+                                                              ^
+restaurante=# create or replace function calc_comissao (data_ini timestamp,data_fim timestamp) returns void as $$ declare total_comissao real := 0; porc_comissao real := 0; reg record; cr_porce CURSOR (func_id int) IS select rt_valor_comissao(func_id); begin for reg in(select vendas.id id, funcionario_id, venda_total from vendas where data_criacao >= data_ini and data_criacao<= data_fim and venda_situacao = 'A')loop open cr_porce(reg.funcionario_id); fetch cr_porce into porc_comissao; close cr_porce; total_comissao := (reg.venda_total * porc_comissao)/100; insert into comissoes(funcionario_id, comissao_valor, comissao_situacao, data_criacao, data_atualizacao) values (reg.funcionario_id, total_comissao, 'A', now(), now()); update vendas set venda_situacao = 'C' where id = reg.id; total_comissao := 0; porc_comissao := 0; end
+ loop; end $$ language plpgsql;
+CREATE FUNCTION
+restaurante=# select calc_comissao('01/01/2024 00:00:00', '01/01/2024 00:00:
+00');
+ calc_comissao
+---------------
+
+(1 registro)
+
+
+restaurante=# select comissao_valor, data_criacao from comissoes;
+ comissao_valor |        data_criacao
+----------------+----------------------------
+            0.4 | 2024-03-18 12:55:52.566365
+           0.42 | 2024-03-18 12:55:52.566365
+(2 registros)
+
+
+restaurante=# drop function calc_comissoes();
+ERRO:  função calc_comissoes() não existe
+restaurante=# drop function calc_comissao();
+ERRO:  função calc_comissao() não existe
+restaurante=# drop function calc_comissao();
+ERRO:  função calc_comissao() não existe
+restaurante=# drop function calc_comissao
+restaurante-# drop function calc_comissao;
+ERRO:  erro de sintaxe em ou próximo a "drop"
+LINHA 2: drop function calc_comissao;
+         ^
+restaurante=# drop function calc_comissao();
+ERRO:  função calc_comissao() não existe
+restaurante=# drop function calc_comissoes();
+ERRO:  função calc_comissoes() não existe
+restaurante=# create or replace function calc_comissao (data_ini timestamp,data_fim timestamp) returns void as $$ declare total_comissao real := 0; porc_comissao real := 0; reg record; cr_porce CURSOR (func_id int) IS select rt_valor_comissao(func_id); begin for reg in(select vendas.id id, funcionario_id, venda_total from vendas where data_criacao >= data_ini and data_criacao<= data_fim and venda_situacao = 'A')loop open cr_porce(reg.funcionario_id); fetch cr_porce into porc_comissao; close cr_porce; total_comissao := (reg.venda_total * porc_comissao)/100; insert into comissoes(funcionario_id, comissao_valor, comissao_situacao, data_criacao, data_atualizacao) values (reg.funcionario_id, total_comissao, 'A', now(), now()); update vendas set venda_situacao = 'C' where id = reg.id; total_comissao := 0; porc_comissao := 0; end loop; end $$ language plpgsql;
+CREATE FUNCTION
+restaurante=# drop function calc_comissoes();
+ERRO:  função calc_comissoes() não existe
+restaurante=# drop function calc_comissao();
+ERRO:  função calc_comissao() não existe
+restaurante=# \?
+Geral
+  \bind [PARAM]...       set query parameters
+  \copyright             mostra termos de uso e distribuiþÒo do PostgreSQL
+  \crosstabview [COLUMNS] execute query and display result in crosstab
+  \errverbose            mostra mensagem de erro mais recente com detalhamento mßximo
+  \g [(OPTIONS)] [FILE]  execute query (and send result to file or |pipe);
+                         \g with no arguments is equivalent to a semicolon
+  \gdesc                 describe result of query, without executing it
+  \gexec                 executa consulta, em seguida, executa cada valor no seu resultado
+  \gset [PREFIX]         execute query and store result in psql variables
+  \gx [(OPTIONS)] [FILE] as \g, but forces expanded output mode
+  \q                     sair do psql
+  \watch [[i=]SEC] [c=N] execute query every SEC seconds, up to N times
+
+Ajuda
+  \? [commands]          mostra ajuda sobre comandos de barra invertida
+  \? options             mostra ajuda sobre opþ§es de linha de comando do psql
+  \? variables           mostra ajuda sobre varißveis especiais
+  \h [NOME]              mostra sintaxe dos comandos SQL, * para todos os comandos
+
+Buffer de consulta
+  \e [ARQUIVO] [LINHA]    edita o buffer de consulta (ou arquivo) com um editor externo
+  \ef [NOMEFUNÃ├O [LINHA]] edita a definiþÒo de funþÒo com um editor externo  \ev [NOMEVIS├O [LINHA]] edita a definiþÒo de visÒo com um editor externo
+  \p                     mostra o conte·do do buffer de consulta
+  \r                     reinicia (apaga) o buffer de consulta
+  \w [ARQUIVO]           escreve o buffer de consulta para arquivo
+
+Entrada/SaÝda
+  \copy ...              realiza comando SQL COPY dos dados para mßquina cliente
+  \echo [-n] [STRING]    write string to standard output (-n for no newline)  \i ARQUIVO             executa comandos de um arquivo
+  \ir ARQUIVO            como \i, mas relativo ao local do script atual
+  \o [ARQUIVO]           envia todos os resultados da consulta para arquivoou |pipe
+  \qecho [-n] [STRING]   write string to \o output stream (-n for no newline)
+  \warn [-n] [STRING]    write string to standard error (-n for no newline)
+
+Conditional
+  \if EXPR               begin conditional block
+  \elif EXPR             alternative within current conditional block
+  \else                  final alternative within current conditional block
+  \endif                 end conditional block
+
+Informativo
+  (opþ§es: S = mostra objetos do sistema, + = detalhes)
+  \d[S+]                 lista tabelas, vis§es e sequÛncias
+  \d[S+]  NOME           descreve tabela, visÒo, sequÛncia ou Ýndice
+  \da[S]  [MODELO]       lista funþ§es de agregaþÒo
+  \dA[+]  [MODELO]       lista mÚtodos de acesso
+  \dAc[+] [AMPTRN [TYPEPTRN]]  list operator classes
+  \dAf[+] [AMPTRN [TYPEPTRN]]  list operator families
+  \dAo[+] [AMPTRN [OPFPTRN]]   list operators of operator families
+  \dAp[+] [AMPTRN [OPFPTRN]]   list support functions of operator families
+  \db[+]  [MODELO]       lista tablespaces
+  \dc[S+]  [MODELO]      lista convers§es
+  \dconfig[+] [PATTERN]  list configuration parameters
+  \dC[+]  [MODELO]       lista convers§es de tipos
+  \dd[S]  [MODELO]       mostra comentßrios de objetos que nÒo aparecem em outro lugar
+  \dD[S+] [MODELO]       lista domÝnios
+  \ddp    [MODELO]       lista privilÚgios padrÒo
+  \dE[S+] [MODELO]       lista tabelas externas
+  \des[+] [MODELO]       lista servidores externos
+  \det[+] [MODELO]       lista tabelas externas
+  \deu[+] [MODELO]       lista mapeamento de usußrios
+  \dew[+] [MODELO]       lista adaptadores de dados externos
+  \df[anptw][S+] [FUNCPTRN [TYPEPTRN ...]]
+                         list [only agg/normal/procedure/trigger/window] functions
+  \dF[+]  [MODELO]       lista configuraþ§es de busca textual
+  \dFd[+] [MODELO]       lista dicionßrios de busca textual
+  \dFp[+] [MODELO]       lista analisadores de busca textual
+  \dFt[+] [MODELO]       lista modelos de busca textual
+  \dg[S+] [MODELO]       lista roles
+  \di[S+] [MODELO]       lista Ýndices
+  \dl[+]                 list large objects, same as \lo_list
+  \dL[S+] [MODELO]       lista linguagens procedurais
+  \dm[S+] [MODELO]       lista vis§es materializadas
+  \dn[S+] [MODELO]       lista esquemas
+  \do[S+] [OPPTRN [TYPEPTRN [TYPEPTRN]]]
+                         list operators
+  \dO[S+] [MODELO]       lista ordenaþ§es
+  \dp[S]  [PATTERN]      list table, view, and sequence access privileges
+restaurante=# \da
+                           Lista das funþ§es de agregaþÒo
+ Esquema | Nome | Tipo de dado do resultado | Tipos de dado do argumento | DescriþÒo
+---------+------+---------------------------+----------------------------+-----------
+(0 registro)
+
+
+restaurante=# \df
+                                                                  Lista de funþ§es
+ Esquema |           Nome           | Tipo de dado do resultado |
+              Tipos de dado do argumento                         | Tipo
+---------+--------------------------+---------------------------+----------------------------------------------------------------------------+------
+ public  | calc_comissao            | void                      | data_ini timestamp without time zone, data_fim timestamp without time zone | func
+ public  | retorna_nome_funcionario | text                      | func_id integer                                                            | func
+ public  | rt_valor_comissao        | real                      | func_id integer                                                            | func
+(3 registros)
+
+
+restaurante=#
+restaurante=# drop function calc_comissao;
+DROP FUNCTION
+restaurante=# \df
+                                          Lista de funþ§es
+ Esquema |           Nome           | Tipo de dado do resultado | Tipos de dado do argumento | Tipo
+---------+--------------------------+---------------------------+----------------------------+------
+ public  | retorna_nome_funcionario | text                      | func_id integer            | func
+ public  | rt_valor_comissao        | real                      | func_id integer            | func
+(2 registros)
+
+
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome | produto_valor | produto_situacao |data_criacao     |  data_atualizacao
+----+----------------+--------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL       |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA         |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(3 registros)
+
+
+restaurante=# insert into produtos(produto_codigo, produto_nome, produto_val
+or, produto_situacao, data_criacao, data_atualizacao) values ('2832', 'SUCO
+DE FRUTA', 15, 'C', '02/02/2024', '02/02/2024');
+INSERT 0 1
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome  | produto_valor | produto_situacao | data_criacao     |  data_atualizacao
+----+----------------+---------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE  |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL        |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA          |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  4 | 2832           | SUCO DE FRUTA |            15 | C                | 2024-02-02 00:00:00 | 2024-02-02 00:00:00
+(4 registros)
+
+
+restaurante=# select * from produtos where produto_situacao = 'A' and produt
+o_situacao = 'C';
+ id | produto_codigo | produto_nome | produto_valor | produto_situacao | data_criacao | data_atualizacao
+----+----------------+--------------+---------------+------------------+--------------+------------------
+(0 registro)
+
+
+restaurante=# select * from produtos where produto_situacao = 'A' or produto
+_situacao = 'C';
+ id | produto_codigo | produto_nome  | produto_valor | produto_situacao | data_criacao     |  data_atualizacao
+----+----------------+---------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE  |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL        |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA          |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  4 | 2832           | SUCO DE FRUTA |            15 | C                | 2024-02-02 00:00:00 | 2024-02-02 00:00:00
+(4 registros)
+
+
+restaurante=# select * from produtos where not produto_nome = 'SUCO DE FRUTA';
+ id | produto_codigo | produto_nome | produto_valor | produto_situacao |data_criacao     |  data_atualizacao
+----+----------------+--------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL       |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA         |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(3 registros)
+
+
+restaurante=# select !10
+restaurante-# select !10;
+ERRO:  erro de sintaxe em ou próximo a "!"
+LINHA 2: select !10;
+                ^
+restaurante=# select !!10;
+ERRO:  operador não existe: !! integer
+LINHA 1: select !!10;
+                ^
+DICA:  No operator matches the given name and argument type. You might needto add an explicit type cast.
+restaurante=# select !! 10;
+ERRO:  operador não existe: !! integer
+LINHA 1: select !! 10;
+                ^
+DICA:  No operator matches the given name and argument type. You might needto add an explicit type cast.
+restaurante=# select 10!;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 10!;
+                   ^
+restaurante=# select 10!
+restaurante-# select 10! ;
+ERRO:  erro de sintaxe em ou próximo a "select"
+LINHA 2: select 10! ;
+         ^
+restaurante=# select 10!;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 10!;
+                   ^
+restaurante=# 10!
+restaurante-# select 5!;
+ERRO:  erro de sintaxe em ou próximo a "10"
+LINHA 1: 10!
+         ^
+restaurante=# select 5!;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 5!;
+                  ^
+restaurante=# select abs(-5);;
+ abs
+-----
+   5
+(1 registro)
+
+
+restaurante=# select abs(-5);
+ abs
+-----
+   5
+(1 registro)
+
+
+restaurante=# select -5!;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select -5!;
+                   ^
+restaurante=# select 2!;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 2!;
+                  ^
+restaurante=# select cbrt(29);
+        cbrt
+--------------------
+ 3.0723168256858475
+(1 registro)
+
+
+restaurante=# select ceil (-51.1);v
+ ceil
+------
+  -51
+(1 registro)
+
+
+restaurante-# select ceil (-51.1);
+ERRO:  erro de sintaxe em ou próximo a "v"
+LINHA 1: v
+         ^
+restaurante=# select ceil (-51.1);v
+ ceil
+------
+  -51
+(1 registro)
+
+
+restaurante-# *select ceil (-51.1);v
+ERRO:  erro de sintaxe em ou próximo a "v"
+LINHA 1: v
+         ^
+restaurante-# *select ceil (-51.1);
+ERRO:  erro de sintaxe em ou próximo a "v"
+LINHA 1: v
+         ^
+restaurante=# select ceil (-51.1);
+ ceil
+------
+  -51
+(1 registro)
+
+
+restaurante=# select ceil (-51.1);
+ ceil
+------
+  -51
+(1 registro)
+
+
+restaurante=# select count(*) funcionarios;
+ funcionarios
+--------------
+            1
+(1 registro)
+
+
+restaurante=# select count(*) produtos;
+ produtos
+----------
+        1
+(1 registro)
+
+
+restaurante=# log(10)
+restaurante-# select log(10);
+ERRO:  erro de sintaxe em ou próximo a "log"
+LINHA 1: log(10)
+         ^
+restaurante=# select log(10);
+ log
+-----
+   1
+(1 registro)
+
+
+restaurante=# select 5!;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 5!;
+                  ^
+restaurante=# select 5!;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 5!;
+                  ^
+restaurante=# select 5!;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 5!;
+                  ^
+restaurante=# select 5 !! ;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 5 !! ;
+                     ^
+restaurante=# select 5 !;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 5 !;
+                   ^
+restaurante=# select 5 ! ;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 5 ! ;
+                    ^
+restaurante=# select 5 !! ;
+ERRO:  erro de sintaxe em ou próximo a ";"
+LINHA 1: select 5 !! ;
+                     ^
+restaurante=# select !5 ;
+ERRO:  operador não existe: ! integer
+LINHA 1: select !5 ;
+                ^
+DICA:  No operator matches the given name and argument type. You might needto add an explicit type cast.
+restaurante=# select ! 5 ;
+ERRO:  operador não existe: ! integer
+LINHA 1: select ! 5 ;
+                ^
+DICA:  No operator matches the given name and argument type. You might needto add an explicit type cast.
+restaurante=# select !! 5 ;
+ERRO:  operador não existe: !! integer
+LINHA 1: select !! 5 ;
+                ^
+DICA:  No operator matches the given name and argument type. You might needto add an explicit type cast.
+restaurante=# select !!5 ;
+ERRO:  operador não existe: !! integer
+LINHA 1: select !!5 ;
+                ^
+DICA:  No operator matches the given name and argument type. You might needto add an explicit type cast.
+restaurante=# clear
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-#
+restaurante-# select pi();
+ERRO:  erro de sintaxe em ou próximo a "clear"
+LINHA 1: clear
+         ^
+restaurante=#
+restaurante=# select pi();
+        pi
+-------------------
+ 3.141592653589793
+(1 registro)
+
+
+restaurante=# select sin(10);
+         sin
+---------------------
+ -0.5440211108893698
+(1 registro)
+
+
+restaurante=# select funcionario_codigo || funcionario_nome form funcionario
+s where id = 1;;
+ERRO:  erro de sintaxe em ou próximo a "funcionarios"
+LINHA 1: ...elect funcionario_codigo || funcionario_nome form funcionari...
+                                                              ^
+restaurante=# select funcionario_codigo || funcionario_nome form funcionarios where id = 1;;
+ERRO:  erro de sintaxe em ou próximo a "funcionarios"
+LINHA 1: ...elect funcionario_codigo || funcionario_nome form funcionari...
+                                                              ^
+restaurante=# select funcionario_codigo || funcionario_nome form funcionarios where id = 1;
+ERRO:  erro de sintaxe em ou próximo a "funcionarios"
+LINHA 1: ...elect funcionario_codigo || funcionario_nome form funcionari...
+                                                              ^
+restaurante=# select funcionario_codigo || funcionario_nome from funcionario
+s where id = 1;
+     ?column?
+-------------------
+ 0001Adauto Moisés
+(1 registro)
+
+
+restaurante=# select funcionario_codigo || ' ' ||funcionario_nome from funci
+onarios where id = 1;
+      ?column?
+--------------------
+ 0001 Adauto Moisés
+(1 registro)
+
+
+restaurante=# select funcionario_codigo || ' funcionario_nome' from funciona
+rios where id = 1;
+       ?column?
+-----------------------
+ 0001 funcionario_nome
+(1 registro)
+
+
+restaurante=# select funcionario_codigo || ' 'funcionario_nome from funciona
+rios where id = 1;
+ funcionario_nome
+------------------
+ 0001
+(1 registro)
+
+
+restaurante=# select funcionario_codigo || ' ' ||funcionario_nome from funci
+onarios where id = 1;
+      ?column?
+--------------------
+ 0001 Adauto Moisés
+(1 registro)
+
+
+restaurante=# select funcionario_codigo || ' 'funcionario_nome from funcionarios where id = 1;
+ funcionario_nome
+------------------
+ 0001
+(1 registro)
+
+
+restaurante=# select funcionario_codigo ||8||funcionario_nome from funcionar
+ios where id = 1;
+      ?column?
+--------------------
+ 00018Adauto Moisés
+(1 registro)
+
+
+restaurante=# select overlay(funcionario_nome placing '*****' from 3 for 5)
+from funcionarios where id = 1;
+    overlay
+---------------
+ Ad*****Moisés
+(1 registro)
+
+
+restaurante=# select overlay(funcionario_nome placing '***********8**' from
+3 for 5) from funcionarios where id = 1;
+        overlay
+------------------------
+ Ad***********8**Moisés
+(1 registro)
+
+
+restaurante=# select overlay(funcionario_nome placing '*' from 3 for 5) from
+ funcionarios where id = 1;
+  overlay
+-----------
+ Ad*Moisés
+(1 registro)
+
+
+restaurante=# select overlay(funcionario_nome placing '' from 3 for 5) from
+funcionarios where id = 1;
+ overlay
+----------
+ AdMoisés
+(1 registro)
+
+
+restaurante=# select overlay(funcionario_nome placing '*****' from 3 for 5)from funcionarios where id = 1;
+    overlay
+---------------
+ Ad*****Moisés
+(1 registro)
+
+
+restaurante=# select substring(funcionario_nome from 3 for 5) from funcionar
+ios where id = 1;
+ substring
+-----------
+ auto
+(1 registro)
+
+
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# select position('auto' in funcionario_nome) from funcionarioswhere id = 1;
+ position
+----------
+        3
+(1 registro)
+
+
+restaurante=# show datestyle
+restaurante-# show datestyle;
+ERRO:  erro de sintaxe em ou próximo a "show"
+LINHA 2: show datestyle;
+         ^
+restaurante=# show datestyle;
+ DateStyle
+-----------
+ ISO, DMY
+(1 registro)
+
+
+restaurante=# select age(timestamp '01/01/2024');
+      age
+----------------
+ 2 mons 17 days
+(1 registro)
+
+
+restaurante=# select age(timestamp '04/03/2022');
+       age
+-----------------
+ 2 years 14 days
+(1 registro)
+
+
+restaurante=# select age(timestamp '04/03/2002');
+       age
+------------------
+ 22 years 14 days
+(1 registro)
+
+
+restaurante=# select age(timestamp '08/10/2001');
+           age
+-------------------------
+ 22 years 5 mons 10 days
+(1 registro)
+
+
+restaurante=# select age(timestamp '08/10/2001', '08/10/2024');
+    age
+-----------
+ -23 years
+(1 registro)
+
+
+restaurante=# select age(timestamp '18/03/2024', '08/10/2024');
+       age
+------------------
+ -6 mons -21 days
+(1 registro)
+
+
+restaurante=# select clock_timestamp();;
+        clock_timestamp
+-------------------------------
+ 2024-03-18 13:39:46.977979-03
+(1 registro)
+
+
+restaurante=# select clock_timestamp();
+        clock_timestamp
+-------------------------------
+ 2024-03-18 13:39:48.535953-03
+(1 registro)
+
+
+restaurante=# select current_date;
+ current_date
+--------------
+ 2024-03-18
+(1 registro)
+
+
+restaurante=# select current_time;
+    current_time
+--------------------
+ 13:40:30.806761-03
+(1 registro)
+
+
+restaurante=# select now();
+              now
+-------------------------------
+ 2024-03-18 13:42:11.394427-03
+(1 registro)
+
+
+restaurante=# select timeofday();
+              timeofday
+-------------------------------------
+ Mon Mar 18 13:42:28.856708 2024 -03
+(1 registro)
+
+
+restaurante=# select date_part('day', timestamp '04/11/1988 20:38:40');
+ date_part
+-----------
+         4
+(1 registro)
+
+
+restaurante=# select date_part('time', timestamp '04/11/1988 20:38:40');
+ERRO:  unit "time" not recognized for type timestamp without time zone
+restaurante=# select date_part('minutes', timestamp '04/11/1988 20:38:40');
+ date_part
+-----------
+        38
+(1 registro)
+
+
+restaurante=# select date_part('month', timestamp '04/11/1988 20:38:40');
+ date_part
+-----------
+        11
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 28 hour');
+    justify_interval
+-------------------------
+ 3 mons 28 days 20:00:00
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 24 hour');
+ justify_interval
+------------------
+ 3 mons 29 days
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 0.1 hour');
+    justify_interval
+-------------------------
+ 3 mons 29 days 23:54:00
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 0.5 hour');
+    justify_interval
+-------------------------
+ 3 mons 29 days 23:30:00
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 0 hour');
+ justify_interval
+------------------
+ 4 mons
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 0.00000001 hour');
+        justify_interval
+--------------------------------
+ 3 mons 29 days 23:59:59.999964
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 0.00000000001 hour');
+
+ justify_interval
+------------------
+ 4 mons
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 0.0000000001 hour');
+ justify_interval
+------------------
+ 4 mons
+(1 registro)
+
+
+restaurante=# select justify_interval(interval'4 mon - 0.000000001 hour');
+        justify_interval
+--------------------------------
+ 3 mons 29 days 23:59:59.999996
+(1 registro)
+
+
+restaurante=#
+restaurante=# select extract (century from timestamp '01/01/2024');
+ extract
+---------
+      21
+(1 registro)
+
+
+restaurante=# select extract (century from timestamp '01/01/2000');
+ extract
+---------
+      20
+(1 registro)
+
+
+restaurante=# select extract (century from timestamp '01/01/2001');
+ extract
+---------
+      21
+(1 registro)
+
+
+restaurante=# sleec
+restaurante-# select * from funcionarios;
+ERRO:  erro de sintaxe em ou próximo a "sleec"
+LINHA 1: sleec
+         ^
+restaurante=# select * from funcionarios;
+ id | funcionario_codigo | funcionario_nome | funcionario_situacao | funcionario_comissao | funcionario_cargo |    data_criacao     | data_atualizacao
+----+--------------------+------------------+----------------------+----------------------+-------------------+---------------------+------------------
+  1 | 0001               | Adauto Moisés    | A                    |            5 | GERENTE           | 2024-01-01 00:00:00 |
+  2 | 0002               | Rafael Aires     | A                    |            2 | GARÇOM            | 2024-01-01 00:00:00 |
+(2 registros)
+
+
+restaurante=# select count(*) from funcionarios;
+ count
+-------
+     2
+(1 registro)
+
+
+restaurante=# select count(**id**) from funcionarios;
+ERRO:  erro de sintaxe em ou próximo a ")"
+LINHA 1: select count(**id**) from funcionarios;
+                            ^
+restaurante=# select count(**id**) from funcionarios;
+ERRO:  erro de sintaxe em ou próximo a ")"
+LINHA 1: select count(**id**) from funcionarios;
+                            ^
+restaurante=# select count(id) from funcionarios;
+ count
+-------
+     2
+(1 registro)
+
+
+restaurante=# select sum(venda_total) from vendas;
+ sum
+-----
+  41
+(1 registro)
+
+
+restaurante=# select avg(produto_valor) from produtos;
+ avg
+-----
+   9
+(1 registro)
+
+
+restaurante=# select max(produto_valor), min(produto_valor) from produtos;
+ max | min
+-----+-----
+  15 |   4
+(1 registro)
+
+
+restaurante=# select max(produto_valor), min(produto_valor), avg(produto_valor) from produtos;
+ max | min | avg
+-----+-----+-----
+  15 |   4 |   9
+(1 registro)
+
+
+restaurante=# select * from produtos;;
+ id | produto_codigo | produto_nome  | produto_valor | produto_situacao | data_criacao     |  data_atualizacao
+----+----------------+---------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE  |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL        |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA          |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  4 | 2832           | SUCO DE FRUTA |            15 | C                | 2024-02-02 00:00:00 | 2024-02-02 00:00:00
+(4 registros)
+
+
+restaurante=# select produto_id, sum(item_total) from itens_vendas group by
+produto_id;
+ produto_id | sum
+------------+-----
+          1 |  41
+(1 registro)
+
+
+restaurante=# select * from itens_vendas;
+ id | produto_id | vendas_id | item_valor | item_quantidade | item_total |  data_criacao     |  data_atualizacao
+----+------------+-----------+------------+-----------------+------------+---------------------+---------------------
+  1 |          1 |         1 |         10 |               2 |         20 | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 |          1 |         2 |          7 |               3 |         21 | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(2 registros)
+
+
+restaurante=# insert into vendas (id, funcionario_id, mesa_id, venda_codigo,
+, venda_valor, venda_total, venda_desconto, venda_situacao, data_criacao, da
+ta_atualizacao) values (10000, 1, 1, '10201', '51', '51', '0', 'A', '01/01/2
+024', '01/01/2024');
+ERRO:  erro de sintaxe em ou próximo a ","
+LINHA 1: ...vendas (id, funcionario_id, mesa_id, venda_codigo,, venda_va...
+                                                              ^
+restaurante=# insert into vendas (id, funcionario_id, mesa_id, venda_codigo,venda_valor, venda_total, venda_desconto, venda_situacao, data_criacao, data_atualizacao) values (10000, 1, 1, '10201', '51', '51', '0', 'A', '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into vendas (id, funcionario_id, mesa_id, venda_codigo,venda_valor, venda_total, venda_desconto, venda_situacao, data_criacao, data_atualizacao) values (10001, 1, 1, '10201', '20', '20', '0', 'A', '01/01/202
+4', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into vendas (id, funcionario_id, mesa_id, venda_codigo,venda_valor, venda_total, venda_desconto, venda_situacao, data_criacao, data_atualizacao) values (10002, 1, 1, '10002', '45', '45', '0', 'A', '01/01/202
+4', '01/01/2024');
+INSERT 0 1
+restaurante=#
+restaurante=# insert into itens_vendas (produto_id, vendas_id, item_valor, item_quantidade, item_total, data_criacao, data_atualizacao) values (4, 10000, 15, 2, 30, '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into itens_vendas (produto_id, vendas_id, item_valor, item_quantidade, item_total, data_criacao, data_atualizacao) values (3, 10000
+, 7, 3, 21, '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into itens_vendas (produto_id, vendas_id, item_valor, item_quantidade, item_total, data_criacao, data_atualizacao) values (1, 10001, 10, 2, 20, '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# insert into itens_vendas (produto_id, vendas_id, item_valor, item_quantidade, item_total, data_criacao, data_atualizacao) values (4, 10002, 15, 3, 45, '01/01/2024', '01/01/2024');
+INSERT 0 1
+restaurante=# select produto_id, sum(item_total) from itens_vendas group by
+produto_id;
+ produto_id | sum
+------------+-----
+          3 |  21
+          4 |  75
+          1 |  61
+(3 registros)
+
+
+restaurante=# create or replace function retorna_nome_produto(prod_id int) r
+eturns text as $$ declare nome text; begin select produto_nome into nome fro
+m produtos where id = prod_id; return nome; end $$ language plpgsql;
+CREATE FUNCTION
+restaurante=# select retorna_nome_produto(produto_id), sum(item_total) from
+itens_vendas group by produto_id;
+ retorna_nome_produto | sum
+----------------------+-----
+ PASTEL               |  21
+ SUCO DE FRUTA        |  75
+ REFRIGERANTE         |  61
+(3 registros)
+
+
+restaurante=# select retorna_nome_produto(produto_id), sum(item_total) fromitens_vendas;
+ERRO:  coluna "itens_vendas.produto_id" deve aparecer na cláusula GROUP BY ou ser utilizada em uma função de agregação
+LINHA 1: select retorna_nome_produto(produto_id), sum(item_total) fro...
+                                     ^
+restaurante=# select retorna_nome_produto(produto_id), sum(item_total) fromitens_vendas group by produto_id;
+ retorna_nome_produto | sum
+----------------------+-----
+ PASTEL               |  21
+ SUCO DE FRUTA        |  75
+ REFRIGERANTE         |  61
+(3 registros)
+
+
+restaurante=# select retorna_nome_produto(produto_id), sum(item_total) fromitens_vendas;
+ERRO:  coluna "itens_vendas.produto_id" deve aparecer na cláusula GROUP BY ou ser utilizada em uma função de agregação
+LINHA 1: select retorna_nome_produto(produto_id), sum(item_total) fro...
+                                     ^
+restaurante=# select produto_id, sum(item_total) from itens_vendas;
+ERRO:  coluna "itens_vendas.produto_id" deve aparecer na cláusula GROUP BY ou ser utilizada em uma função de agregação
+LINHA 1: select produto_id, sum(item_total) from itens_vendas;
+                ^
+restaurante=# select *, sum(item_total) from itens_vendas;
+ERRO:  coluna "itens_vendas.id" deve aparecer na cláusula GROUP BY ou ser utilizada em uma função de agregação
+LINHA 1: select *, sum(item_total) from itens_vendas;
+                ^
+restaurante=# select * from itens_vendas;
+ id | produto_id | vendas_id | item_valor | item_quantidade | item_total |  data_criacao     |  data_atualizacao
+----+------------+-----------+------------+-----------------+------------+---------------------+---------------------
+  1 |          1 |         1 |         10 |               2 |         20 | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 |          1 |         2 |          7 |               3 |         21 | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 |          4 |     10000 |         15 |               2 |         30 | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  4 |          3 |     10000 |          7 |               3 |         21 | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  5 |          1 |     10001 |         10 |               2 |         20 | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  6 |          4 |     10002 |         15 |               3 |         45 | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(6 registros)
+
+
+restaurante=# select retorna_nome_produto(produto_id) from itens_vendas;
+ retorna_nome_produto
+----------------------
+ REFRIGERANTE
+ REFRIGERANTE
+ SUCO DE FRUTA
+ PASTEL
+ REFRIGERANTE
+ SUCO DE FRUTA
+(6 registros)
+
+
+restaurante=# select retorna_nome_produto(produto_id), sum(item_total) fromitens_vendas group by produto_id;
+ retorna_nome_produto | sum
+----------------------+-----
+ PASTEL               |  21
+ SUCO DE FRUTA        |  75
+ REFRIGERANTE         |  61
+(3 registros)
+
+
+restaurante=# select retorna_nome_produto(produto_id) PRODUTO, sum(item_total) VL_TOTAL_PRODUTO from itens_vendas group by produto_id order by vl_total_produto, produto;
+    produto    | vl_total_produto
+---------------+------------------
+ PASTEL        |               21
+ REFRIGERANTE  |               61
+ SUCO DE FRUTA |               75
+(3 registros)
+
+
+restaurante=# select retorna_nome_produto(produto_id) PRODUTO,
+restaurante-# sum(item_total) VL_TOTAL_PRODUTO
+restaurante-# from items_vendas
+restaurante-# group by produto_id
+restaurante-# order by vl_total_produto, produto;
+ERRO:  relação "items_vendas" não existe
+LINHA 3: from items_vendas
+              ^
+restaurante=#
+restaurante=# select retorna_nome_produto(produto_id) PRODUTO,
+restaurante-# sum(item_total) VL_TOTAL_PRODUTO
+restaurante-# from itens_vendas
+restaurante-# group by produto_id
+restaurante-# order by vl_total_produto, produto;
+    produto    | vl_total_produto
+---------------+------------------
+ PASTEL        |               21
+ REFRIGERANTE  |               61
+ SUCO DE FRUTA |               75
+(3 registros)
+
+
+restaurante=# select * from
+restaurante-# vendas;
+  id   | funcionario_id | mesa_id | venda_codigo | venda_valor | venda_total | venda_desconto | venda_situacao |    data_criacao     |  data_atualizacao
+
+-------+----------------+---------+--------------+-------------+-------------+----------------+----------------+---------------------+---------------------
+     1 |              2 |       1 | 0001         |          20 |          20 |              0 | C              | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+     2 |              2 |       2 | 0002         |          21 |          21 |              0 | C              | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+ 10000 |              1 |       1 | 10201        |          51 |          51 |              0 | A              | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+ 10001 |              1 |       1 | 10201        |          20 |          20 |              0 | A              | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+ 10002 |              1 |       1 | 10002        |          45 |          45 |              0 | A              | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+(5 registros)
+
+
+restaurante=# order by vl_total_produto, produto;
+ERRO:  erro de sintaxe em ou próximo a "order"
+LINHA 1: order by vl_total_produto, produto;
+         ^
+restaurante=# select retorna_nome_produto(produto_id) PRODUTO,
+restaurante-# sum(item_total) VL_TOTAL_PRODUTO
+restaurante-# from itens_vendas
+restaurante-# group by produto_id
+restaurante-# order by vl_total_produto desc, produto;
+    produto    | vl_total_produto
+---------------+------------------
+ SUCO DE FRUTA |               75
+ REFRIGERANTE  |               61
+ PASTEL        |               21
+(3 registros)
+
+
+restaurante=# select retorna_nome_produto(produto_id) produto, count(id) qtde from itens_vendas group by produto_id having count (produto_id) >= 2 order
+ by qtde;
+    produto    | qtde
+---------------+------
+ SUCO DE FRUTA |    2
+ REFRIGERANTE  |    3
+(2 registros)
+
+
+restaurante=# select * from funcionario;
+ERRO:  relação "funcionario" não existe
+LINHA 1: select * from funcionario;
+                       ^
+restaurante=# select * from funcionario;
+ERRO:  relação "funcionario" não existe
+LINHA 1: select * from funcionario;
+                       ^
+restaurante=#
+restaurante=# select * from funcionarios;
+ id | funcionario_codigo | funcionario_nome | funcionario_situacao | funcionario_comissao | funcionario_cargo |    data_criacao     | data_atualizacao
+----+--------------------+------------------+----------------------+----------------------+-------------------+---------------------+------------------
+  1 | 0001               | Adauto Moisés    | A                    |            5 | GERENTE           | 2024-01-01 00:00:00 |
+  2 | 0002               | Rafael Aires     | A                    |            2 | GARÇOM            | 2024-01-01 00:00:00 |
+(2 registros)
+
+
+restaurante=# insert    into    funcionarios(funcionario_codigo,
+restaurante(#
+
+
+                                                        funcionario_nome,
+restaurante(#
+
+
+                                                        funcionario_situacao,
+restaurante(#
+
+
+                                                        funcionario_comissao,
+restaurante(#
+
+
+                                                        funcionario_cargo,
+restaurante(#
+
+
+                                                        data_criacao)
+restaurante-#
+
+
+values('0100',
+restaurante(#
+
+
+                                                        'VINICIUS       SOUZA',
+restaurante(#
+
+
+                                                        'A',
+restaurante(#
+
+
+                                                                2,
+restaurante(#
+
+
+                                                        'GARÇOM',
+restaurante(#
+
+
+                                                        '01/03/2016');
+INSERT 0 1
+restaurante=# select * from funcionarios;
+ id | funcionario_codigo |   funcionario_nome    | funcionario_situacao | funcionario_comissao | funcionario_cargo |    data_criacao     | data_atualizacao
+----+--------------------+-----------------------+----------------------+----------------------+-------------------+---------------------+------------------
+  1 | 0001               | Adauto Moisés         | A                    |                 5 | GERENTE           | 2024-01-01 00:00:00 |
+  2 | 0002               | Rafael Aires          | A                    |                 2 | GARÇOM            | 2024-01-01 00:00:00 |
+  3 | 0100               | VINICIUS        SOUZA | A                    |                 2 | GARÇOM            | 2016-03-01 00:00:00 |
+(3 registros)
+
+
+restaurante=# select funcionario_nome from funcionarios
+restaurante-# where funcionario_nome like "A%";
+ERRO:  coluna "A%" não existe
+LINHA 2: where funcionario_nome like "A%";
+                                     ^
+restaurante=# where funcionario_nome like 'A%';
+ERRO:  erro de sintaxe em ou próximo a "where"
+LINHA 1: where funcionario_nome like 'A%';
+         ^
+restaurante=# where funcionario_nome like 'A%';
+ERRO:  erro de sintaxe em ou próximo a "where"
+LINHA 1: where funcionario_nome like 'A%';
+         ^
+restaurante=# select funcionario_nome from funcionarios
+restaurante-# where funcionario_nome like "A%";
+ERRO:  coluna "A%" não existe
+LINHA 2: where funcionario_nome like "A%";
+                                     ^
+restaurante=# select funcionario_nome from funcionarios
+restaurante-# where funcionario_nome like 'A%';
+ funcionario_nome
+------------------
+ Adauto Moisés
+(1 registro)
+
+
+restaurante=# where funcionario_nome like '%A%';
+ERRO:  erro de sintaxe em ou próximo a "where"
+LINHA 1: where funcionario_nome like '%A%';
+         ^
+restaurante=# select funcionario_nome from funcionarios
+restaurante-# where funcionario_nome like '%A%';
+   funcionario_nome
+-----------------------
+ Adauto Moisés
+ Rafael Aires
+ VINICIUS        SOUZA
+(3 registros)
+
+
+restaurante=# create    table   logs_produtos(
+restaurante(#                                id                                int     not     null    primary key,
+restaurante(#
+                                data_alteracao
+                        timestamp,
+restaurante(#
+                                alteracao
+                                                                varchar(10),
+
+restaurante(#
+                                id_old
+
+int,
+restaurante(#
+                                produto_codigo_old
+varchar(20),
+restaurante(#
+                                produto_nome_old
+                varchar(60),
+restaurante(#
+                                produto_valor_old
+        real,
+restaurante(#
+                                produto_situacao_old            varchar(1)default 'A',
+restaurante(#
+                                data_criacao_old
+                timestamp,
+restaurante(#
+                                data_atualizacao_old            timestamp,
+restaurante(#
+                                id_new
+
+int,
+restaurante(#
+                                produto_codigo_new
+varchar(20),
+restaurante(#
+                                produto_nome_new
+                varchar(60),
+restaurante(#
+                                produto_valor_new
+        real,
+restaurante(#
+                                produto_situacao_new            varchar(1)default 'A',
+restaurante(#
+                                data_criacao_new
+                timestamp,
+restaurante(#
+                                data_atualizacao_new            timestamp);
+CREATE TABLE
+restaurante=# \d
+                  Lista de relaþ§es
+ Esquema |        Nome         |   Tipo    |   Dono
+---------+---------------------+-----------+----------
+ public  | comissoes           | tabela    | postgres
+ public  | comissoes_id_seq    | sequÛncia | postgres
+ public  | funcionario_id_seq  | sequÛncia | postgres
+ public  | funcionarios        | tabela    | postgres
+ public  | itens_vendas        | tabela    | postgres
+ public  | itens_vendas_id_seq | sequÛncia | postgres
+ public  | logs_produtos       | tabela    | postgres
+ public  | mesa_id_seq         | sequÛncia | postgres
+ public  | mesas               | tabela    | postgres
+ public  | produtos            | tabela    | postgres
+ public  | produtos_id_seq     | sequÛncia | postgres
+ public  | vendas              | tabela    | postgres
+ public  | vendas_id_seq       | sequÛncia | postgres
+(13 registros)
+
+
+restaurante=# \d logs_produtos
+                                   Tabela "public.logs_produtos"
+        Coluna        |            Tipo             | Collation | Nullable |        Default
+----------------------+-----------------------------+-----------+----------+------------------------
+ id                   | integer                     |           | not null |
+
+ data_alteracao       | timestamp without time zone |           |          |
+
+ alteracao            | character varying(10)       |           |          |
+
+ id_old               | integer                     |           |          |
+
+ produto_codigo_old   | character varying(20)       |           |          |
+
+ produto_nome_old     | character varying(60)       |           |          |
+
+ produto_valor_old    | real                        |           |          |
+
+ produto_situacao_old | character varying(1)        |           |          | 'A'::character varying
+ data_criacao_old     | timestamp without time zone |           |          |
+
+ data_atualizacao_old | timestamp without time zone |           |          |
+
+ id_new               | integer                     |           |          |
+
+ produto_codigo_new   | character varying(20)       |           |          |
+
+ produto_nome_new     | character varying(60)       |           |          |
+
+ produto_valor_new    | real                        |           |          |
+
+ produto_situacao_new | character varying(1)        |           |          | 'A'::character varying
+ data_criacao_new     | timestamp without time zone |           |          |
+
+ data_atualizacao_new | timestamp without time zone |           |          |
+
+═ndices:
+restaurante=# create sequence logs_produto_id_seq;
+CREATE SEQUENCE
+restaurante=# alter table
+restaurante-# logs_produtos
+restaurante-# alter column id set default
+restaurante-# nextval('logs_produto_id_seq');
+ALTER TABLE
+restaurante=# \d logs_produtos
+                                            Tabela "public.logs_produtos"
+        Coluna        |            Tipo             | Collation | Nullable |                 Default
+----------------------+-----------------------------+-----------+----------+------------------------------------------
+ id                   | integer                     |           | not null | nextval('logs_produto_id_seq'::regclass)
+ data_alteracao       | timestamp without time zone |           |          |
+
+ alteracao            | character varying(10)       |           |          |
+
+ id_old               | integer                     |           |          |
+
+ produto_codigo_old   | character varying(20)       |           |          |
+
+ produto_nome_old     | character varying(60)       |           |          |
+
+ produto_valor_old    | real                        |           |          |
+
+ produto_situacao_old | character varying(1)        |           |          | 'A'::character varying
+ data_criacao_old     | timestamp without time zone |           |          |
+
+ data_atualizacao_old | timestamp without time zone |           |          |
+
+ id_new               | integer                     |           |          |
+
+ produto_codigo_new   | character varying(20)       |           |          |
+
+ produto_nome_new     | character varying(60)       |           |          |
+
+ produto_valor_new    | real                        |           |          |
+
+ produto_situacao_new | character varying(1)        |           |          | 'A'::character varying
+ data_criacao_new     | timestamp without time zone |           |          |
+
+ data_atualizacao_new | timestamp without time zone |           |          |
+
+═ndices:
+    "logs_produtos_pkey" PRIMARY KEY, btree (id)
+
+
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# create or replace function gera_log_produtos()
+restaurante-# returns trigger as
+restaurante-# $$
+restaurante$# Begin
+restaurante$# if TG_OP = 'INSERT' then
+restaurante$# insert into logs_produtos
+restaurante$# alteracao,
+restaurante$# data_alteracao,
+restaurante$# id_new,
+restaurante$# produto_codigo_new
+restaurante$# produto_nome_new
+restaurante$# produto_valor_new
+restaurante$# produto_situacao_new
+restaurante$# data_criacao_new
+restaurante$# data_atualizacao_new
+restaurante$#
+restaurante$#
+restaurante$#
+restaurante$#
+restaurante$#
+restaurante$#
+restaurante$#
+restaurante$#
+restaurante$# create or replace function gera_log_produtos()
+restaurante$# returns trigger as
+restaurante$# $$
+restaurante-# Begin
+restaurante-# if TG_OP = 'INSERT' then
+restaurante-# insert into logs_produtos (
+restaurante(# alteracao,
+restaurante(# data_alteracao,
+restaurante(# id_new,
+restaurante(# produto_codigo_new
+restaurante(# produto_nome_new
+restaurante(# produto_valor_new
+restaurante(# produto_situacao_new
+restaurante(# data_criacao_new
+restaurante(# data_atualizacao_new
+restaurante(# )
+restaurante-# values (TG_OP, now(), new.id, new.produto_codigo, new.produto_nome, new.produto_valor, new.produto_situacao, new.data_criacao, new.data_atualizacao); return new;
+restaurante-#   elsif   TG_OP   =       'UPDATE'        then
+restaurante-#                                           insert  into    logs_produtos       (
+
+restaurante(#
+
+alteracao
+restaurante(#
+                                                                        ,data_alteracao
+restaurante(#
+                                                                        ,id_old
+restaurante(#
+
+,produto_codigo_old
+restaurante(#
+                                                                        ,produto_nome_old
+restaurante(#
+                                                                        ,produto_valor_old
+restaurante(#
+                                                                        ,produto_situacao_old
+restaurante(#
+                                                                        ,data_criacao_old
+restaurante(#
+                                                                        ,data_atualizacao_old
+restaurante(#
+                                                                        ,id_new
+restaurante(#
+                                                                        ,produto_codigo_new
+restaurante(#
+                                                                        ,produto_nome_new
+restaurante(#
+                                                                        ,produto_valor_new
+restaurante(#
+                                                                        ,produto_situacao_new
+restaurante(#
+                                                                        ,data_criacao_new
+restaurante(#
+                                                                        ,data_atualizacao_new
+restaurante(#
+                                                                )
+restaurante-#
+                values  (
+restaurante(#
+
+        TG_OP
+restaurante(#
+
+,now()
+restaurante(#
+
+,old.id
+restaurante(#
+                                                                        ,old.produto_codigo
+restaurante(#
+                                                                        ,old.produto_nome
+restaurante(#
+                                                                        ,old.produto_valor
+restaurante(#
+                                                                        ,old.produto_situacao
+restaurante(#
+                                                                        ,old.data_criacao
+restaurante(#
+                                                                        ,old.data_atualizacao
+restaurante(#
+                                                                        ,new.id
+restaurante(#
+                                                                        ,new.produto_codigo
+restaurante(#
+                                                                        ,new.produto_nome
+restaurante(#
+                                                                        ,new.produto_valor
+restaurante(#
+                                                                        ,new.produto_situacao
+restaurante(#
+                                                                        ,new.data_criacao
+restaurante(#
+                                                                        ,new.data_atualizacao
+restaurante(#
+
+);
+restaurante-#
+                                return  new;
+restaurante-#                           elsif   TG_OP   =       'DELETE'then
+restaurante-#                                           insert  into    logs_produtos       (
+
+restaurante(#
+
+alteracao
+restaurante(#
+                                                                        ,data_alteracao
+restaurante(#
+                                                                        ,id_old
+restaurante(#
+
+,produto_codigo_old
+restaurante(#
+                                                                        ,produto_nome_old
+restaurante(#
+                                                                        ,produto_valor_old
+restaurante(#
+                                                                        ,produto_situacao_old
+restaurante(#
+                                                                        ,data_criacao_old
+restaurante(#
+                                                                        ,data_atualizacao_old
+restaurante(#
+                                                                )
+restaurante-#
+                values  (
+restaurante(#
+
+        TG_OP
+restaurante(#
+
+,now()
+restaurante(#
+
+,old.id
+restaurante(#
+                                                                        ,old.produto_codigo
+restaurante(#
+                                                                        ,old.produto_nome
+restaurante(#
+                                                                        ,old.produto_valor
+restaurante(#
+                                                                        ,old.produto_situacao
+restaurante(#
+                                                                        ,old.data_criacao
+restaurante(#
+                                                                        ,old.data_atualizacao
+restaurante(#
+
+);
+restaurante-#
+                                return  new;
+restaurante-#                           end     if;
+ERRO:  erro de sintaxe em ou próximo a "if"
+LINHA 28: if TG_OP = 'INSERT' then
+          ^
+restaurante=# end;
+AVISO:  não há uma transação em execução
+COMMIT
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# create    or      replace function        gera_log_produtos()
+restaurante-# returns   trigger as
+restaurante-#  $$
+restaurante$#  Begin
+restaurante$#           if      TG_OP   =       'INSERT'        then
+restaurante$#                           insert  into    logs_produtos   (
+restaurante$#
+                                                alteracao
+restaurante$#
+                                        ,data_alteracao
+restaurante$#
+                                        ,id_new
+restaurante$#
+                                        ,produto_codigo_new
+restaurante$#
+                                        ,produto_nome_new
+restaurante$#
+                                        ,produto_valor_new
+restaurante$#
+                                        ,produto_situacao_new
+restaurante$#
+                                        ,data_criacao_new
+restaurante$#
+                                        ,data_atualizacao_new
+restaurante$#
+                                )
+restaurante$#                                                   values  (
+restaurante$#
+                                                        TG_OP
+restaurante$#
+                                                ,now()
+restaurante$#
+                                        ,new.id
+restaurante$#
+                                        ,new.produto_codigo
+restaurante$#
+                                        ,new.produto_nome
+restaurante$#
+                                        ,new.produto_valor
+restaurante$#
+                                        ,new.produto_situacao
+restaurante$#
+                                        ,new.data_criacao
+restaurante$#
+                                        ,new.data_atualizacao
+restaurante$#
+                                                );
+restaurante$#
+return  new;
+restaurante$#           elsif   TG_OP   =       'UPDATE'        then
+restaurante$#                                           insert  into    logs_produtos       (
+restaurante$#
+
+alteracao
+restaurante$#
+                                                                        ,data_alteracao
+restaurante$#
+                                                                        ,id_old
+restaurante$#
+
+,produto_codigo_old
+restaurante$#
+                                                                        ,produto_nome_old
+restaurante$#
+                                                                        ,produto_valor_old
+restaurante$#
+                                                                        ,produto_situacao_old
+restaurante$#
+                                                                        ,data_criacao_old
+restaurante$#
+                                                                        ,data_atualizacao_old
+restaurante$#
+                                                                        ,id_new
+restaurante$#
+                                                                        ,produto_codigo_new
+restaurante$#
+                                                                        ,produto_nome_new
+restaurante$#
+                                                                        ,produto_valor_new
+restaurante$#
+                                                                        ,produto_situacao_new
+restaurante$#
+                                                                        ,data_criacao_new
+restaurante$#
+                                                                        ,data_atualizacao_new
+restaurante$#
+                                                                )
+restaurante$#
+                values  (
+restaurante$#
+
+        TG_OP
+restaurante$#
+
+,now()
+restaurante$#
+
+,old.id
+restaurante$#
+                                                                        ,old.produto_codigo
+restaurante$#
+                                                                        ,old.produto_nome
+restaurante$#
+                                                                        ,old.produto_valor
+restaurante$#
+                                                                        ,old.produto_situacao
+restaurante$#
+                                                                        ,old.data_criacao
+restaurante$#
+                                                                        ,old.data_atualizacao
+restaurante$#
+                                                                        ,new.id
+restaurante$#
+                                                                        ,new.produto_codigo
+restaurante$#
+                                                                        ,new.produto_nome
+restaurante$#
+                                                                        ,new.produto_valor
+restaurante$#
+                                                                        ,new.produto_situacao
+restaurante$#
+                                                                        ,new.data_criacao
+restaurante$#
+                                                                        ,new.data_atualizacao
+restaurante$#
+
+);
+restaurante$#
+                                return  new;
+restaurante$#                           elsif   TG_OP   =       'DELETE'then
+restaurante$#                                           insert  into    logs_produtos       (
+restaurante$#
+
+alteracao
+restaurante$#
+                                                                        ,data_alteracao
+restaurante$#
+                                                                        ,id_old
+restaurante$#
+
+,produto_codigo_old
+restaurante$#
+                                                                        ,produto_nome_old
+restaurante$#
+                                                                        ,produto_valor_old
+restaurante$#
+                                                                        ,produto_situacao_old
+restaurante$#
+                                                                        ,data_criacao_old
+restaurante$#
+                                                                        ,data_atualizacao_old
+restaurante$#
+                                                                )
+restaurante$#
+                values  (
+restaurante$#
+
+        TG_OP
+restaurante$#
+
+,now()
+restaurante$#
+
+,old.id
+restaurante$#
+                                                                        ,old.produto_codigo
+restaurante$#
+                                                                        ,old.produto_nome
+restaurante$#
+                                                                        ,old.produto_valor
+restaurante$#
+                                                                        ,old.produto_situacao
+restaurante$#
+                                                                        ,old.data_criacao
+restaurante$#
+                                                                        ,old.data_atualizacao
+restaurante$#
+
+);
+restaurante$#
+                                return  new;
+restaurante$#                           end     if;
+restaurante$# end;
+restaurante$#  $$       language        'plpgsql';
+CREATE FUNCTION
+restaurante=# create    trigger tri_log_produtos
+restaurante-#  after    insert  or      update  or      delete  on      produtos
+restaurante-#  for      each    row     execute
+restaurante-# procedure gera_log_produtos();
+CREATE TRIGGER
+restaurante=# \d produtos
+                                           Tabela "public.produtos"
+      Coluna      |            Tipo             | Collation | Nullable |           Default
+------------------+-----------------------------+-----------+----------+--------------------------------------
+ id               | integer                     |           | not null | nextval('produtos_id_seq'::regclass)
+ produto_codigo   | character varying(20)       |           |          |
+ produto_nome     | character varying(60)       |           |          |
+ produto_valor    | real                        |           |          |
+ produto_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "produtos_pkey" PRIMARY KEY, btree (id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_produto_id_fkey" FOREIGN KEY (produto_id) REFERENCES produtos(id)
+Gatilhos:
+    tri_log_produtos AFTER INSERT OR DELETE OR UPDATE ON produtos FOR EACH ROW EXECUTE FUNCTION gera_log_produtos()
+
+
+restaurante=# select * from logs_produtos;
+ id | data_alteracao | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old | data_criacao_old | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new | data_criacao_new | data_atualizacao_new
+----+----------------+-----------+--------+--------------------+------------------+-------------------+----------------------+------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+------------------+----------------------
+(0 registro)
+
+
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome  | produto_valor | produto_situacao | data_criacao     |  data_atualizacao
+----+----------------+---------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE  |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL        |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA          |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  4 | 2832           | SUCO DE FRUTA |            15 | C                | 2024-02-02 00:00:00 | 2024-02-02 00:00:00
+(4 registros)
+
+
+restaurante=#
+restaurante=# insert    into    produtos        (produto_codigo,
+restaurante(#
+
+
+                                produto_nome,
+restaurante(#
+
+
+                                produto_valor,
+restaurante(#
+
+
+                                produto_situacao,
+restaurante(#
+
+
+                                data_criacao,
+restaurante(#
+
+
+                                data_atualizacao)
+restaurante-#
+
+                                                values  ('1512',
+restaurante(#
+
+
+                                'LAZANHA',
+restaurante(#
+
+
+                                46,
+restaurante(#
+
+
+                                'A',
+restaurante(#
+
+
+                                '01/01/2016',
+restaurante(#
+
+
+                                '01/01/2016');
+INSERT 0 1
+restaurante=# insert    into    produtos        (produto_codigo,
+restaurante(#
+
+
+                                produto_nome,
+restaurante(#
+
+
+                                produto_valor,
+restaurante(#
+
+
+                                produto_situacao,
+restaurante(#
+
+
+                                data_criacao,
+restaurante(#
+
+
+                                data_atualizacao)
+restaurante-#
+
+                                                values  ('1613',
+restaurante(#
+
+
+                                'PANQUECA',
+restaurante(#
+
+
+                                38,
+restaurante(#
+
+
+                                'A',
+restaurante(#
+
+
+                                '01/01/2016',
+restaurante(#
+
+
+                                '01/01/2016');
+INSERT 0 1
+restaurante=# insert    into    produtos        (produto_codigo,
+restaurante(#
+
+
+                                produto_nome,
+restaurante(#
+
+
+                                produto_valor,
+restaurante(#
+
+
+                                produto_situacao,
+restaurante(#
+
+
+                                data_criacao,
+restaurante(#
+
+
+                                data_atualizacao)
+restaurante-#
+
+                                                values  ('733',
+restaurante(#
+
+
+                                'CHURRASCO',
+restaurante(#
+
+
+                                72,
+restaurante(#
+
+
+                                'A',
+restaurante(#
+
+
+                                '01/01/2016',
+restaurante(#
+
+
+                                '01/01/2016');
+INSERT 0 1
+restaurante=# select * from produtos;;
+ id | produto_codigo | produto_nome  | produto_valor | produto_situacao | data_criacao     |  data_atualizacao
+----+----------------+---------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE  |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL        |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA          |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  4 | 2832           | SUCO DE FRUTA |            15 | C                | 2024-02-02 00:00:00 | 2024-02-02 00:00:00
+  5 | 1512           | LAZANHA       |            46 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  6 | 1613           | PANQUECA      |            38 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  7 | 733            | CHURRASCO     |            72 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+(7 registros)
+
+
+restaurante=# select * from logs_produtos;
+ id |       data_alteracao       | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old | data_criacao_old | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new| produto_valor_new | produto_situacao_new |  data_criacao_new   | data_atualizacao_new
+----+----------------------------+-----------+--------+--------------------+------------------+-------------------+----------------------+------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+  1 | 2024-03-18 14:45:37.234386 | INSERT    |        |                    |                  |                   | A                    |
+    |                      |      5 | 1512               | LAZANHA
+|                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  2 | 2024-03-18 14:45:44.81688  | INSERT    |        |                    |                  |                   | A                    |
+    |                      |      6 | 1613               | PANQUECA
+|                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  3 | 2024-03-18 14:45:54.378855 | INSERT    |        |                    |                  |                   | A                    |
+    |                      |      7 | 733                | CHURRASCO|                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+(3 registros)
+
+
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#   select  alteracao
+restaurante-#
+                                        ,data_alteracao
+restaurante-#
+                                        ,id_new
+restaurante-#
+                                        ,produto_codigo_new
+
+restaurante-#
+                                        ,produto_nome_new
+
+restaurante-#
+                                        ,produto_valor_new
+
+restaurante-#
+                                        ,produto_situacao_new
+restaurante-#
+                                        ,data_criacao_new
+
+restaurante-#
+                                        ,data_atualizacao_new
+restaurante-#
+from    logs_produtos;
+ alteracao |       data_alteracao       | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new |  data_criacao_new  | data_atualizacao_new
+-----------+----------------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+ INSERT    | 2024-03-18 14:45:37.234386 |      5 | 1512               | LAZANHA          |                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+ INSERT    | 2024-03-18 14:45:44.81688  |      6 | 1613               | PANQUECA         |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+ INSERT    | 2024-03-18 14:45:54.378855 |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+(3 registros)
+
+
+restaurante=#   update  produtos        set     produto_valor   =       99
+restaurante-#                                                   where   produto_nome        =       'CHURRASCO';
+UPDATE 1
+restaurante=#from    logs_produtos;
+ERRO:  erro de sintaxe em ou próximo a "from"
+LINHA 1: from logs_produtos;
+         ^
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome  | produto_valor | produto_situacao | data_criacao     |  data_atualizacao
+----+----------------+---------------+---------------+------------------+---------------------+---------------------
+  1 | 001            | REFRIGERANTE  |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  3 | 003            | PASTEL        |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  2 | 002            | AGUA          |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00
+  4 | 2832           | SUCO DE FRUTA |            15 | C                | 2024-02-02 00:00:00 | 2024-02-02 00:00:00
+  5 | 1512           | LAZANHA       |            46 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  6 | 1613           | PANQUECA      |            38 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  7 | 733            | CHURRASCO     |            99 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+(7 registros)
+
+
+restaurante=# select * from logs_produtos;
+ id |       data_alteracao       | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old |  data_criacao_old   | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new |  data_criacao_new   | data_atualizacao_new
+----+----------------------------+-----------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+  1 | 2024-03-18 14:45:37.234386 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      5 | 1512               | LAZANHA   |                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  2 | 2024-03-18 14:45:44.81688  | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      6 | 1613               | PANQUECA   |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  3 | 2024-03-18 14:45:54.378855 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      7 | 733                | CHURRASCO   |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  4 | 2024-03-18 14:47:29.022862 | UPDATE    |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |      7 | 733                | CHURRASCO   |                99 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+(4 registros)
+
+
+restaurante=# select * from logs_produtos;
+ id |       data_alteracao       | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old |  data_criacao_old   | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new |  data_criacao_new   | data_atualizacao_new
+----+----------------------------+-----------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+  1 | 2024-03-18 14:45:37.234386 | INSERT    |        |                    |                  |                   | A                    |       |                      |      5 | 1512               | LAZANHA   |                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  2 | 2024-03-18 14:45:44.81688  | INSERT    |        |                    |                  |                   | A                    |       |                      |      6 | 1613               | PANQUECA   |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  3 | 2024-03-18 14:45:54.378855 | INSERT    |        |                    |                  |                   | A                    |       |                      |      7 | 733                | CHURRASCO   |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  4 | 2024-03-18 14:47:29.022862 | UPDATE    |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |      7 | 733                | CHURRASCO   |                99 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+(4 registros)
+
+
+restaurante=#                                            ,produto_nome_new
+                delete from produtos where produto_nome = 'PANQUECA';
+ERRO:  erro de sintaxe em ou próximo a ","
+LINHA 1: ,produto_nome_new     delete from produtos where produto_nom...
+         ^
+restaurante=# delete from produtos where produto_nome = 'PANQUECA';
+DELETE 1
+restaurante=# select * from logs_produtos;
+ id |       data_alteracao       | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old |  data_criacao_old   | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new |  data_criacao_new   | data_atualizacao_new
+----+----------------------------+-----------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+  1 | 2024-03-18 14:45:37.234386 | INSERT    |        |                    |                  |                   | A                    |
+   |                      |      5 | 1512               | LAZANHA          |                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  2 | 2024-03-18 14:45:44.81688  | INSERT    |        |                    |                  |                   | A                    |
+   |                      |      6 | 1613               | PANQUECA         |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  3 | 2024-03-18 14:45:54.378855 | INSERT    |        |                    |                  |                   | A                    |
+   |                      |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  4 | 2024-03-18 14:47:29.022862 | UPDATE    |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |      7 | 733                | CHURRASCO   |                99 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  5 | 2024-03-18 14:48:54.622215 | DELETE    |      6 | 1613               | PANQUECA         |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |        |                    |   |                   | A                    |                     |
+(5 registros)
+
+
+restaurante=# alter table produtos disable trigger tri_log_produtos;
+ALTER TABLE
+restaurante=# select * from logs_produtos;
+ id |       data_alteracao       | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old |  data_criacao_old   | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new |  data_criacao_new   | data_atualizacao_new
+----+----------------------------+-----------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+  1 | 2024-03-18 14:45:37.234386 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      5 | 1512               | LAZANHA   |                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  2 | 2024-03-18 14:45:44.81688  | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      6 | 1613               | PANQUECA   |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  3 | 2024-03-18 14:45:54.378855 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      7 | 733                | CHURRASCO   |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  4 | 2024-03-18 14:47:29.022862 | UPDATE    |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |      7 | 733                | CHURRASCO   |                99 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  5 | 2024-03-18 14:48:54.622215 | DELETE    |      6 | 1613               | PANQUECA         |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |        |                    |
+   |                   | A                    |                     |
+(5 registros)
+
+
+restaurante=#   insert  into    produtos        (produto_codigo,
+restaurante(#
+
+
+                                produto_nome,
+restaurante(#
+
+
+                                produto_valor,
+restaurante(#
+
+
+                                produto_situacao,
+restaurante(#
+
+
+                                data_criacao,
+restaurante(#
+
+
+                                data_atualizacao)
+restaurante-#
+
+                                                values  ('912',
+restaurante(#
+
+
+                                'SORVETE',
+restaurante(#
+
+
+                                        6,
+restaurante(#
+
+
+                                'A',
+restaurante(#
+
+
+                                '01/01/2016',
+restaurante(#
+
+
+                                '01/01/2016');
+INSERT 0 1
+restaurante=# select * from logs_produtos;
+ id |       data_alteracao       | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old |  data_criacao_old   | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new |  data_criacao_new   | data_atualizacao_new
+----+----------------------------+-----------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+  1 | 2024-03-18 14:45:37.234386 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      5 | 1512               | LAZANHA   |                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  2 | 2024-03-18 14:45:44.81688  | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      6 | 1613               | PANQUECA   |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  3 | 2024-03-18 14:45:54.378855 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      7 | 733                | CHURRASCO   |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  4 | 2024-03-18 14:47:29.022862 | UPDATE    |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |      7 | 733                | CHURRASCO   |                99 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  5 | 2024-03-18 14:48:54.622215 | DELETE    |      6 | 1613               | PANQUECA         |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |        |                    |
+   |                   | A                    |                     |
+(5 registros)
+
+
+restaurante=# alter     table   produtos
+restaurante-#
+                enable  trigger tri_log_produtos;
+ALTER TABLE
+restaurante=# select * from logs_produtos;
+ id |       data_alteracao       | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old |  data_criacao_old   | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new |  data_criacao_new   | data_atualizacao_new
+----+----------------------------+-----------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+  1 | 2024-03-18 14:45:37.234386 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      5 | 1512               | LAZANHA   |                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  2 | 2024-03-18 14:45:44.81688  | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      6 | 1613               | PANQUECA   |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  3 | 2024-03-18 14:45:54.378855 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      7 | 733                | CHURRASCO   |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  4 | 2024-03-18 14:47:29.022862 | UPDATE    |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |      7 | 733                | CHURRASCO   |                99 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  5 | 2024-03-18 14:48:54.622215 | DELETE    |      6 | 1613               | PANQUECA         |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |        |                    |
+   |                   | A                    |                     |
+(5 registros)
+
+
+restaurante=#
+restaurante=#   update  produtos        set     produto_valor   =       10
+restaurante-#
+                        where   produto_nome    =       'SORVETE';
+UPDATE 1
+restaurante=# select * from logs_produtos;
+ id |       data_alteracao       | alteracao | id_old | produto_codigo_old | produto_nome_old | produto_valor_old | produto_situacao_old |  data_criacao_old   | data_atualizacao_old | id_new | produto_codigo_new | produto_nome_new | produto_valor_new | produto_situacao_new |  data_criacao_new   | data_atualizacao_new
+----+----------------------------+-----------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------+--------+--------------------+------------------+-------------------+----------------------+---------------------+----------------------
+  1 | 2024-03-18 14:45:37.234386 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      5 | 1512               | LAZANHA   |                46 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  2 | 2024-03-18 14:45:44.81688  | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      6 | 1613               | PANQUECA   |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  3 | 2024-03-18 14:45:54.378855 | INSERT    |        |                    |                  |                   | A                    |
+       |                      |      7 | 733                | CHURRASCO   |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  4 | 2024-03-18 14:47:29.022862 | UPDATE    |      7 | 733                | CHURRASCO        |                72 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |      7 | 733                | CHURRASCO   |                99 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+  5 | 2024-03-18 14:48:54.622215 | DELETE    |      6 | 1613               | PANQUECA         |                38 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |        |                    |
+   |                   | A                    |                     |
+  6 | 2024-03-18 14:51:53.359256 | UPDATE    |      8 | 912                | SORVETE          |                 6 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00  |      8 | 912                | SORVETE   |                10 | A                    | 2016-01-01 00:00:00 | 2016-01-01 00:00:00
+(6 registros)
+
+
+restaurante=#
+restaurante=#
+restaurante=# drop trigger tri_log_produtos on produtos;;
+DROP TRIGGER
+restaurante=# \d produtos
+                                           Tabela "public.produtos"
+      Coluna      |            Tipo             | Collation | Nullable |           Default
+------------------+-----------------------------+-----------+----------+--------------------------------------
+ id               | integer                     |           | not null | nextval('produtos_id_seq'::regclass)
+ produto_codigo   | character varying(20)       |           |          |
+ produto_nome     | character varying(60)       |           |          |
+ produto_valor    | real                        |           |          |
+ produto_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "produtos_pkey" PRIMARY KEY, btree (id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_produto_id_fkey" FOREIGN KEY (produto_id) REFERENCES produtos(id)
+
+
+restaurante=# select funcionario_nome from funcionarios where id in (selectfuncionario_id from vendas);
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=#
+restaurante=# select * from funcionarios;
+ id | funcionario_codigo |   funcionario_nome    | funcionario_situacao | funcionario_comissao | funcionario_cargo |    data_criacao     | data_atualizacao
+----+--------------------+-----------------------+----------------------+----------------------+-------------------+---------------------+------------------
+  1 | 0001               | Adauto Moisés         | A                    |                 5 | GERENTE           | 2024-01-01 00:00:00 |
+  2 | 0002               | Rafael Aires          | A                    |                 2 | GARÇOM            | 2024-01-01 00:00:00 |
+  3 | 0100               | VINICIUS        SOUZA | A                    |                 2 | GARÇOM            | 2016-03-01 00:00:00 |
+(3 registros)
+
+
+restaurante=# select funcionario_nome from funcionarios where id in (selectfuncionario_id from vendas);
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# select funcionario_nome from funcionarios where id in (selectfuncionario_id from vendas where date_part('year', data_criacao) = '2024');
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# select funcionario_nome from funcionarios where id in (selectfuncionario_id from vendas where date_part('year', data_criacao) = '2016');
+ funcionario_nome
+------------------
+(0 registro)
+
+
+restaurante=# select funcionario_nome from funcionarios where id in (selectfuncionario_id from vendas where date_part('year', data_criacao) = '2024');
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# select id from vendas
+restaurante-# select id from vendas;
+ERRO:  erro de sintaxe em ou próximo a "select"
+LINHA 2: select id from vendas;
+         ^
+restaurante=# select id from vendas;
+  id
+-------
+     1
+     2
+ 10000
+ 10001
+ 10002
+(5 registros)
+
+
+restaurante=# select funcionario_nome from funcionarios;
+   funcionario_nome
+-----------------------
+ Adauto Moisés
+ Rafael Aires
+ VINICIUS        SOUZA
+(3 registros)
+
+
+restaurante=# select funcionario_nome from funcionarios
+restaurante-# select funcionario_nome from funcionarios as f
+restaurante-# where f.id in (select funcionario_id from vendas);
+ERRO:  erro de sintaxe em ou próximo a "select"
+LINHA 2: select funcionario_nome from funcionarios as f
+         ^
+restaurante=# select f.funcionario_nome from funcionarios as f
+restaurante-# where f.id in (select funcionario_id from vendas);
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# \d
+                  Lista de relaþ§es
+ Esquema |        Nome         |   Tipo    |   Dono
+---------+---------------------+-----------+----------
+ public  | comissoes           | tabela    | postgres
+ public  | comissoes_id_seq    | sequÛncia | postgres
+ public  | funcionario_id_seq  | sequÛncia | postgres
+ public  | funcionarios        | tabela    | postgres
+ public  | itens_vendas        | tabela    | postgres
+ public  | itens_vendas_id_seq | sequÛncia | postgres
+ public  | logs_produto_id_seq | sequÛncia | postgres
+ public  | logs_produtos       | tabela    | postgres
+ public  | mesa_id_seq         | sequÛncia | postgres
+ public  | mesas               | tabela    | postgres
+ public  | produtos            | tabela    | postgres
+ public  | produtos_id_seq     | sequÛncia | postgres
+ public  | vendas              | tabela    | postgres
+ public  | vendas_id_seq       | sequÛncia | postgres
+(14 registros)
+
+
+restaurante=# \d funcionarios
+                                            Tabela "public.funcionarios"
+        Coluna        |            Tipo             | Collation | Nullable |                 Default
+----------------------+-----------------------------+-----------+----------+-----------------------------------------
+ id                   | integer                     |           | not null | nextval('funcionario_id_seq'::regclass)
+ funcionario_codigo   | character varying(20)       |           |          |
+
+ funcionario_nome     | character varying(100)      |           |          |
+
+ funcionario_situacao | character varying(1)        |           |          | 'A'::character varying
+ funcionario_comissao | real                        |           |          |
+
+ funcionario_cargo    | character varying(30)       |           |          |
+
+ data_criacao         | timestamp without time zone |           |          |
+
+ data_atualizacao     | timestamp without time zone |           |          |
+
+═ndices:
+    "funcionarios_pkey" PRIMARY KEY, btree (id)
+Restriþ§es de verificaþÒo:
+    "funcionarios_funcionario_nome_check" CHECK (funcionario_nome::text <> NULL::text)
+Referenciada por:
+    TABLE "comissoes" CONSTRAINT "comissoes_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+    TABLE "vendas" CONSTRAINT "vendas_funcionario_id_fkey" FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+
+
+restaurante=# select * from funcionarios;
+ id | funcionario_codigo |   funcionario_nome    | funcionario_situacao | funcionario_comissao | funcionario_cargo |    data_criacao     | data_atualizacao
+----+--------------------+-----------------------+----------------------+----------------------+-------------------+---------------------+------------------
+  1 | 0001               | Adauto Moisés         | A                    |                 5 | GERENTE           | 2024-01-01 00:00:00 |
+  2 | 0002               | Rafael Aires          | A                    |                 2 | GARÇOM            | 2024-01-01 00:00:00 |
+  3 | 0100               | VINICIUS        SOUZA | A                    |                 2 | GARÇOM            | 2016-03-01 00:00:00 |
+(3 registros)
+
+
+restaurante=# select distinct funcionario_nome from funcionarios
+restaurante-# where id in (select funcionario_id from vendas)
+restaurante-# order by funcionario_nome;
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# select distinct f.funcionario_nome from funcionarios as f
+restaurante-# where id in (select funcionario_id from vendas)
+restaurante-# order by funcionario_nome;
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# select distinct funcionario_nome from funcionarios, vendas whe
+re funcionarios.id = vendas.funcionario_id order by funcionario_nome;
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# select funcionario_nome from funcionarios, vendas where funcio
+narios.id = vendas.funcionario_id order by funcionario_nome;
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Adauto Moisés
+ Adauto Moisés
+ Rafael Aires
+ Rafael Aires
+(5 registros)
+
+
+restaurante=# select distinct funcionario_nome from funcionarios, vendas where funcionarios.id = vendas.funcionario_id order by funcionario_nome;
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# select distinct funcionario_nome
+restaurante-# from funcionarios
+restaurante-# inner join vendas
+restaurante-# on (funcionarios.id = vendas.funcionario_id)
+restaurante-# order by funcionario_nome;
+ funcionario_nome
+------------------
+ Adauto Moisés
+ Rafael Aires
+(2 registros)
+
+
+restaurante=# select funcionario_nome, v.id from funcionarios f left join vendas v on f..id = v.funcionario_id order by funcionario_nome desc;
+ERRO:  erro de sintaxe em ou próximo a ".."
+LINHA 1: ..., v.id from funcionarios f left join vendas v on f..id = v.f...
+                                                              ^
+restaurante=# select funcionario_nome, v.id from funcionarios f left join vendas v on f.id = v.funcionario_id order by funcionario_nome desc;
+   funcionario_nome    |  id
+-----------------------+-------
+ VINICIUS        SOUZA |
+ Rafael Aires          |     1
+ Rafael Aires          |     2
+ Adauto Moisés         | 10000
+ Adauto Moisés         | 10001
+ Adauto Moisés         | 10002
+(6 registros)
+
+
+restaurante=# select funcionario_nome, v.id from funcionarios f right join v
+endas v on f.id = v.funcionario_id order by funcionario_nome desc;
+ funcionario_nome |  id
+------------------+-------
+ Rafael Aires     |     1
+ Rafael Aires     |     2
+ Adauto Moisés    | 10000
+ Adauto Moisés    | 10001
+ Adauto Moisés    | 10002
+(5 registros)
+
+
+restaurante=# select funcionario_nome, v.id from funcionarios f left join vendas v on f.id = v.funcionario_id order by funcionario_nome desc;
+   funcionario_nome    |  id
+-----------------------+-------
+ VINICIUS        SOUZA |
+ Rafael Aires          |     1
+ Rafael Aires          |     2
+ Adauto Moisés         | 10000
+ Adauto Moisés         | 10001
+ Adauto Moisés         | 10002
+(6 registros)
+
+
+restaurante=# select v.id, v.venda_total, funcionario_nome from vendas v right join funcionarios f on v.funcionario_id = f.id order by v.venda_total;
+  id   | venda_total |   funcionario_nome
+-------+-------------+-----------------------
+     1 |          20 | Rafael Aires
+ 10001 |          20 | Adauto Moisés
+     2 |          21 | Rafael Aires
+ 10002 |          45 | Adauto Moisés
+ 10000 |          51 | Adauto Moisés
+       |             | VINICIUS        SOUZA
+(6 registros)
+
+
+restaurante=#   insert  into    produtos        (produto_codigo,
+restaurante(#
+
+
+                                produto_nome,
+restaurante(#
+
+
+                                produto_valor,
+restaurante(#
+
+
+                                produto_situacao,
+restaurante(#
+
+
+                                data_criacao,
+restaurante(#
+
+
+                                data_atualizacao)
+restaurante-#
+
+                                                values  ('912',
+restaurante(#
+
+
+                                'SORVETE',
+restaurante(#
+create  or      replace view    vendas_do_dia   as
+restaurante(#
+                                                        select  distinctproduto_nome
+restaurante(#
+
+                ,       sum(vendas.venda_total)
+restaurante(#
+                                                                        from        produtos,       itens_vendas,   vendas
+restaurante(#
+                                                                where   produtos.id =       itens_vendas.produto_id
+restaurante(#
+
+and     vendas.id                       =       itens_vendas.vendas_id
+restaurante(#
+
+and     vendas.data_criacao     =       '01/01/2024'
+restaurante(#
+                                                                group   byproduto_nome;
+
+                                                6,
+restaurante(#
+
+
+                                'A',
+restaurante(#
+
+
+                                '01/01/2016',
+restaurante(#
+
+
+                                '01/01/2016');
+ERRO:  erro de sintaxe em ou próximo a "create"
+LINHA 9:          create or replace view vendas_do_dia as
+                  ^
+restaurante=# create    or      replace view    vendas_do_dia   as
+restaurante-#
+                                                        select  distinctproduto_nome
+restaurante-#
+
+                ,       sum(vendas.venda_total)
+restaurante-#
+                                                                        from        produtos,       itens_vendas,   vendas
+restaurante-#
+                                                                where   produtos.id =       itens_vendas.produto_id
+restaurante-#
+
+and     vendas.id                       =       itens_vendas.vendas_id
+restaurante-#
+
+and     vendas.data_criacao     =       '01/01/2024'
+restaurante-#
+                                                                group   byproduto_nome;
+
+                                                6,
+CREATE VIEW
+restaurante-#
+
+
+                                'A',
+restaurante-#
+
+
+                                '01/01/2024',
+restaurante-#
+
+
+                                '01/01/2024');
+ERRO:  erro de sintaxe em ou próximo a "6"
+LINHA 1: 6,
+         ^
+restaurante=# create    or      replace view    vendas_do_dia   as
+restaurante-#                                                        select  distinctproduto_nome
+restaurante-#
+
+                ,       sum(vendas.venda_total)
+restaurante-#
+                                                                        from        produtos,       itens_vendas,   vendas
+restaurante-#
+                                                                where   produtos.id =       itens_vendas.produto_id
+restaurante-#
+
+and     vendas.id                       =       itens_vendas.vendas_id
+restaurante-#
+
+and     vendas.data_criacao     =       '01/01/2024'
+restaurante-#
+                                                                group   byproduto_nome;
+CREATE VIEW
+restaurante=# select * from vendas_do_dia;
+ produto_nome  | sum
+---------------+-----
+ PASTEL        |  51
+ REFRIGERANTE  |  61
+ SUCO DE FRUTA |  96
+(3 registros)
+
+
+restaurante=# select * from vendas_do_dia where produto_nome = 'PASTEL';
+ produto_nome | sum
+--------------+-----
+ PASTEL       |  51
+(1 registro)
+
+
+restaurante=# reate     or      replace view    produtos_vendas as
+restaurante-#
+                                                select  produtos.id     PRODUTO_ID
+restaurante-#
+
+        ,       produtos.produto_nome   PRODUTO_NOME
+restaurante-#
+
+        ,       vendas.id       VENDA_ID
+restaurante-#
+
+        ,       itens_vendas.id ITEM_ID
+restaurante-#
+
+        ,       itens_vendas.item_valor ITEM_VALOR
+restaurante-#
+
+        ,       vendas.data_criacao     DATA_CRIACAO
+restaurante-#
+                                                                from    produtos,   vendas, itens_vendas
+restaurante-#
+                                                        where   vendas.id                =       itens_vendas.vendas_id
+restaurante-#
+                                                                        andprodutos.id     =       itens_vendas.produto_id
+restaurante-#
+                                                        order   by      data_criacao        desc;
+ERRO:  erro de sintaxe em ou próximo a "reate"
+LINHA 1: reate or replace view produtos_vendas as
+         ^
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# create    or      replace view    produtos_vendas as
+restaurante-#
+                                                select  produtos.id     PRODUTO_ID
+restaurante-#
+
+        ,       produtos.produto_nome   PRODUTO_NOME
+restaurante-#
+
+        ,       vendas.id       VENDA_ID
+restaurante-#
+
+        ,       itens_vendas.id ITEM_ID
+restaurante-#
+
+        ,       itens_vendas.item_valor ITEM_VALOR
+restaurante-#
+
+        ,       vendas.data_criacao     DATA_CRIACAO
+restaurante-#
+                                                                from    produtos,   vendas, itens_vendas
+restaurante-#
+                                                        where   vendas.id                =       itens_vendas.vendas_id
+restaurante-#
+                                                                        andprodutos.id     =       itens_vendas.produto_id
+restaurante-#
+                                                        order   by      data_criacao        desc;
+CREATE VIEW
+restaurante=#
+restaurante=# select * from produtos_vendas;;
+ produto_id | produto_nome  | venda_id | item_id | item_valor |    data_criacao
+------------+---------------+----------+---------+------------+---------------------
+          1 | REFRIGERANTE  |        1 |       1 |         10 | 2024-01-01 00:00:00
+          1 | REFRIGERANTE  |        2 |       2 |          7 | 2024-01-01 00:00:00
+          4 | SUCO DE FRUTA |    10000 |       3 |         15 | 2024-01-01 00:00:00
+          3 | PASTEL        |    10000 |       4 |          7 | 2024-01-01 00:00:00
+          1 | REFRIGERANTE  |    10001 |       5 |         10 | 2024-01-01 00:00:00
+          4 | SUCO DE FRUTA |    10002 |       6 |         15 | 2024-01-01 00:00:00
+(6 registros)
+
+
+restaurante=# select * from produtos_vendas where item_valor => 10;
+ERRO:  erro de sintaxe em ou próximo a "=>"
+LINHA 1: select * from produtos_vendas where item_valor => 10;
+                                                        ^
+restaurante=# select * from produtos_vendas where item_valor >= 10;
+ produto_id | produto_nome  | venda_id | item_id | item_valor |    data_criacao
+------------+---------------+----------+---------+------------+---------------------
+          1 | REFRIGERANTE  |        1 |       1 |         10 | 2024-01-01 00:00:00
+          4 | SUCO DE FRUTA |    10000 |       3 |         15 | 2024-01-01 00:00:00
+          1 | REFRIGERANTE  |    10001 |       5 |         10 | 2024-01-01 00:00:00
+          4 | SUCO DE FRUTA |    10002 |       6 |         15 | 2024-01-01 00:00:00
+(4 registros)
+
+
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=#
+restaurante=# create    or      replace view    produtos_estoque        as
+restaurante-#  select   *
+restaurante-# from      produtos;
+CREATE VIEW
+restaurante=# select produto_nome from produtos_estoque;;
+ produto_nome
+---------------
+ REFRIGERANTE
+ PASTEL
+ AGUA
+ SUCO DE FRUTA
+ LAZANHA
+ CHURRASCO
+ SORVETE
+(7 registros)
+
+
+restaurante=#
