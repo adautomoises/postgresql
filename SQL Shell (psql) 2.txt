@@ -1,0 +1,720 @@
+Server [localhost]:
+Database [postgres]: restaurante
+Port [5432]:
+Username [postgres]:
+Senha para usuário postgres:
+
+psql (16.1)
+AVISO: página de código do Console (850) difere da página de código do Windows (1252)
+         caracteres de 8 bits podem não funcionar corretamente. Veja páginade
+         referência do psql "Notes for Windows users" para obter detalhes.
+Digite "help" para ajuda.
+
+restaurante=# \d produtos
+                                           Tabela "public.produtos"
+      Coluna      |            Tipo             | Collation | Nullable |           Default
+------------------+-----------------------------+-----------+----------+--------------------------------------
+ id               | integer                     |           | not null | nextval('produtos_id_seq'::regclass)
+ produto_codigo   | character varying(20)       |           |          |
+ produto_nome     | character varying(60)       |           |          |
+ produto_valor    | real                        |           |          |
+ produto_situacao | character varying(1)        |           |          | 'A'::character varying
+ data_criacao     | timestamp without time zone |           |          |
+ data_atualizacao | timestamp without time zone |           |          |
+═ndices:
+    "produtos_pkey" PRIMARY KEY, btree (id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_produto_id_fkey" FOREIGN KEY (produto_id) REFERENCES produtos(id)
+
+
+restaurante=# alter table produtos add column produto_categoria text[];
+ALTER TABLE
+restaurante=# insert into produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_criacao, data_atualizacao, produto_categoria) values ('03251', 'ESFIRRA', 5, 'A', '01/01/2024', '01/01/2024', '{"CARNE", "SALGADO, "SALGADO", "ASSADO", "QUEIJO"}');
+ERRO:  matriz mal formada: "{"CARNE", "SALGADO, "SALGADO", "ASSADO", "QUEIJO"}"
+LINHA 1: ...', 'ESFIRRA', 5, 'A', '01/01/2024', '01/01/2024', '{"CARNE",...
+                                                              ^
+DETALHE:  Elemento da matriz inesperado.
+restaurante=# insert into produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_criacao, data_atualizacao, produto_categoria) values ('03251', 'ESFIRRA', 5, 'A', '01/01/2024', '01/01/2024', '{"CARNE", "SALGADO, "SALGADO", "ASSADO", "QUEIJO"}');
+ERRO:  matriz mal formada: "{"CARNE", "SALGADO, "SALGADO", "ASSADO", "QUEIJO"}"
+LINHA 1: ...', 'ESFIRRA', 5, 'A', '01/01/2024', '01/01/2024', '{"CARNE",...
+                                                              ^
+DETALHE:  Elemento da matriz inesperado.
+restaurante=# insert into produtos (produto_codigo, produto_nome, produto_valor, produto_situacao, data_criacao, data_atualizacao, produto_categoria) values ('03251', 'ESFIRRA', 5, 'A', '01/01/2024', '01/01/2024', '{"CARNE", "SA
+LGADO", "ASSADO", "QUEIJO"}');
+INSERT 0 1
+restaurante=# \d produtos
+                                           Tabela "public.produtos"
+      Coluna       |            Tipo             | Collation | Nullable |            Default
+-------------------+-----------------------------+-----------+----------+--------------------------------------
+ id                | integer                     |           | not null | nextval('produtos_id_seq'::regclass)
+ produto_codigo    | character varying(20)       |           |          |
+ produto_nome      | character varying(60)       |           |          |
+ produto_valor     | real                        |           |          |
+ produto_situacao  | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+ produto_categoria | text[]                      |           |          |
+═ndices:
+    "produtos_pkey" PRIMARY KEY, btree (id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_produto_id_fkey" FOREIGN KEY (produto_id) REFERENCES produtos(id)
+
+
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome  | produto_valor | produto_situacao | data_criacao     |  data_atualizacao   |       produto_categoria
+----+----------------+---------------+---------------+------------------+---------------------+---------------------+-------------------------------
+  1 | 001            | REFRIGERANTE  |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 |
+  3 | 003            | PASTEL        |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 |
+  2 | 002            | AGUA          |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 |
+  4 | 2832           | SUCO DE FRUTA |            15 | C                | 2024-02-02 00:00:00 | 2024-02-02 00:00:00 |
+  5 | 1512           | LAZANHA       |            46 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00 |
+  7 | 733            | CHURRASCO     |            99 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00 |
+  8 | 912            | SORVETE       |            10 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00 |
+  9 | 03251          | ESFIRRA       |             5 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 | {CARNE,SALGADO,ASSADO,QUEIJO}
+(8 registros)
+
+
+restaurante=# select produto_categoria from produtos where produto_nome like
+ 'ESFIRRA';
+       produto_categoria
+-------------------------------
+ {CARNE,SALGADO,ASSADO,QUEIJO}
+(1 registro)
+
+
+restaurante=# select produto_categoria[2] from produtos where produto_nome l
+ike 'ESFIRRA';
+ produto_categoria
+-------------------
+ SALGADO
+(1 registro)
+
+
+restaurante=# select produto_categoria[2,3] from produtos where produto_nome
+ like 'ESFIRRA';
+ERRO:  erro de sintaxe em ou próximo a ","
+LINHA 1: select produto_categoria[2,3] from produtos where produto_no...
+                                   ^
+restaurante=# select produto_categoria[0] from produtos where produto_nome l
+ike 'ESFIRRA';
+ produto_categoria
+-------------------
+
+(1 registro)
+
+
+restaurante=#
+restaurante=# select produto_categoria[4] from produtos where produto_nome l
+ike 'ESFIRRA';
+ produto_categoria
+-------------------
+ QUEIJO
+(1 registro)
+
+
+restaurante=# select produto_categoria[1:4] from produtos where produto_nome
+ like 'ESFIRRA';
+       produto_categoria
+-------------------------------
+ {CARNE,SALGADO,ASSADO,QUEIJO}
+(1 registro)
+
+
+restaurante=# select produto_categoria[3:4] from produtos where produto_nome
+ like 'ESFIRRA';
+ produto_categoria
+-------------------
+ {ASSADO,QUEIJO}
+(1 registro)
+
+
+restaurante=# select produto_categoria[4:4] from produtos where produto_nome
+ like 'ESFIRRA';
+ produto_categoria
+-------------------
+ {QUEIJO}
+(1 registro)
+
+
+restaurante=#
+restaurante=# alter table produtos add column produto_estoque json;
+ALTER TABLE
+restaurante=# \d produtos
+                                           Tabela "public.produtos"
+      Coluna       |            Tipo             | Collation | Nullable |            Default
+-------------------+-----------------------------+-----------+----------+--------------------------------------
+ id                | integer                     |           | not null | nextval('produtos_id_seq'::regclass)
+ produto_codigo    | character varying(20)       |           |          |
+ produto_nome      | character varying(60)       |           |          |
+ produto_valor     | real                        |           |          |
+ produto_situacao  | character varying(1)        |           |          | 'A'::character varying
+ data_criacao      | timestamp without time zone |           |          |
+ data_atualizacao  | timestamp without time zone |           |          |
+ produto_categoria | text[]                      |           |          |
+ produto_estoque   | json                        |           |          |
+═ndices:
+    "produtos_pkey" PRIMARY KEY, btree (id)
+Referenciada por:
+    TABLE "itens_vendas" CONSTRAINT "itens_vendas_produto_id_fkey" FOREIGN KEY (produto_id) REFERENCES produtos(id)
+
+
+restaurante=# insert    into    produtos(produto_codigo,
+restaurante(#
+
+                        produto_nome,
+restaurante(#
+
+                        produto_valor,
+restaurante(#
+
+                        produto_situacao,
+restaurante(#
+
+                        data_criacao,
+restaurante(#
+
+                        data_atualizacao,
+restaurante(#
+
+                        produto_categoria,
+restaurante(#
+
+                        produto_estoque)
+restaurante-#
+                        values('6234',
+restaurante(#
+
+'COCA-COLA',
+restaurante(#
+
+6,
+restaurante(#
+
+'A',
+restaurante(#
+
+'01/01/2024',
+restaurante(#
+
+'01/01/2024',
+restaurante(#
+
+'{"REFRIGERANTE",
+restaurante'#
+
+                "LATA",
+restaurante'#
+
+                "BEBIDA"        ,
+restaurante'#
+
+                "COLA"}',
+restaurante(#
+
+'{      "info_estoque":
+restaurante'#
+
+                        {       "tem_estoque":  "SIM",
+restaurante'#
+
+                                        "quantidade":   17,
+restaurante'#
+
+                                        "ultima_compra":        "01/01/24"}
+restaurante'#
+
+        }'
+restaurante(#
+
+);
+INSERT 0 1
+restaurante=# select produto_estoque from produtos where produto_nome like '
+COCA-COLA';
+
+                                     produto_estoque
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {       "info_estoque":
+
+
+             +
+
+
+                         {       "tem_estoque":  "SIM",
+             +
+
+
+                                         "quantidade":   17,
+             +
+
+
+                                         "ultima_compra":        "01/01/24"     }       +
+
+
+         }
+(1 registro)
+
+
+restaurante=# update produtos
+restaurante-# set produto_estoque = '{"info_estoque":{"tem_estoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}'
+restaurante-# select produto_estoque from produtos where produto_nome like 'COCA-COLA';
+ERRO:  erro de sintaxe em ou próximo a "select"
+LINHA 3: select produto_estoque from produtos where produto_nome like...
+         ^
+restaurante=# select produto_estoque from produtos where produto_nome like 'COCA-COLA';
+
+                                     produto_estoque
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {       "info_estoque":
+
+
+             +
+
+
+                         {       "tem_estoque":  "SIM",
+             +
+
+
+                                         "quantidade":   17,
+             +
+
+
+                                         "ultima_compra":        "01/01/24"     }       +
+
+
+         }
+(1 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_nome like 'COCA-COLA';
+                                     produto_estoque
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {       "info_estoque":
+
+
+             +
+
+
+                         {       "tem_estoque":  "SIM",
+             +
+
+
+                                         "quantidade":   17,
+             +
+
+
+                                         "ultima_compra":        "01/01/24"     }       +
+
+
+         }
+(1 registro)
+
+
+restaurante=# update produtos set produto_estoque = '{"info_estoque":{"tem_e
+stoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}'
+restaurante-# select produto_estoque from produtos where produto_nome like 'COCA-COLA';
+ERRO:  erro de sintaxe em ou próximo a "select"
+LINHA 2: select produto_estoque from produtos where produto_nome like...
+         ^
+restaurante=# select produto_estoque from produtos where produto_nome like 'COCA-COLA';
+
+                                     produto_estoque
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {       "info_estoque":
+
+
+             +
+
+
+                         {       "tem_estoque":  "SIM",
+             +
+
+
+                                         "quantidade":   17,
+             +
+
+
+                                         "ultima_compra":        "01/01/24"     }       +
+
+
+         }
+(1 registro)
+
+
+restaurante=# set produto_estoque = '{"info_estoque":{"tem_estoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}'
+restaurante-# update produtos set produto_estoque = '{"info_estoque":{"tem_estoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}';
+ERRO:  erro de sintaxe em ou próximo a "update"
+LINHA 2: update produtos set produto_estoque = '{"info_estoque":{"tem...
+         ^
+restaurante=# select * from produtos;
+ id | produto_codigo | produto_nome  | produto_valor | produto_situacao | data_criacao     |  data_atualizacao   |        produto_categoria        |
+                                    produto_estoque
+
+
+----+----------------+---------------+---------------+------------------+---------------------+---------------------+---------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1 | 001            | REFRIGERANTE  |            10 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 |                                 |  3 | 003            | PASTEL        |             7 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 |                                 |  2 | 002            | AGUA          |             4 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 |                                 |  4 | 2832           | SUCO DE FRUTA |            15 | C                | 2024-02-02 00:00:00 | 2024-02-02 00:00:00 |                                 |  5 | 1512           | LAZANHA       |            46 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00 |                                 |  7 | 733            | CHURRASCO     |            99 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00 |                                 |  8 | 912            | SORVETE       |            10 | A                | 2016-01-01 00:00:00 | 2016-01-01 00:00:00 |                                 |  9 | 03251          | ESFIRRA       |             5 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 | {CARNE,SALGADO,ASSADO,QUEIJO}   | 10 | 6234           | COCA-COLA     |             6 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 | {REFRIGERANTE,LATA,BEBIDA,COLA} |{       "info_estoque":
+
+
+            +
+    |                |               |               |                  |                  |                     |                                 |
+
+                        {       "tem_estoque":  "SIM",
+            +
+restaurante=# select * from produtos where produto_codigo = '6234'
+restaurante-# select * from produtos where produto_codigo = '6234';
+ERRO:  erro de sintaxe em ou próximo a "select"
+LINHA 2: select * from produtos where produto_codigo = '6234';
+         ^
+restaurante=# select * from produtos where produto_codigo = '6234';
+ id | produto_codigo | produto_nome | produto_valor | produto_situacao |data_criacao     |  data_atualizacao   |        produto_categoria        |
+                                   produto_estoque
+
+
+----+----------------+--------------+---------------+------------------+---------------------+---------------------+---------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 10 | 6234           | COCA-COLA    |             6 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 | {REFRIGERANTE,LATA,BEBIDA,COLA} | {       "info_estoque":
+
+
+           +
+    |                |              |               |                  |                 |                     |                                 |
+
+                       {       "tem_estoque":  "SIM",
+           +
+    |                |              |               |                  |                 |                     |                                 |
+
+                                       "quantidade":   17,
+           +
+    |                |              |               |                  |                 |                     |                                 |
+
+                                       "ultima_compra":        "01/01/24"   }       +
+    |                |              |               |                  |                 |                     |                                 |
+
+       }
+(1 registro)
+
+
+restaurante=#
+restaurante=#
+restaurante=# update produtos set produto_estoque = '{"info_estoque":{"tem_estoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}' where produto_codigo = '6234';
+UPDATE 1
+restaurante=# select * from produtos where produto_codigo = '6234';
+ id | produto_codigo | produto_nome | produto_valor | produto_situacao |data_criacao     |  data_atualizacao   |        produto_categoria        |                                produto_estoque
+
+----+----------------+--------------+---------------+------------------+---------------------+---------------------+---------------------------------+-----------------------------------------------------------------------------------
+ 10 | 6234           | COCA-COLA    |             6 | A                | 2024-01-01 00:00:00 | 2024-01-01 00:00:00 | {REFRIGERANTE,LATA,BEBIDA,COLA} | {"info_estoque":{"tem_estoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}
+(1 registro)
+
+
+restaurante=# select produto_estoque->'info_estoque'->>'quantidade' as quant
+idade from produtos;
+ quantidade
+------------
+
+
+
+
+
+
+
+
+ 17
+(9 registros)
+
+
+restaurante=# select produto_estoque->'info_estoque'->>'quantidade' as quantidade from produtos where produto_codigo = '6234';
+ quantidade
+------------
+ 17
+(1 registro)
+
+
+restaurante=# select produto_estoque->'info_estoque'->>'ultima_compra' as qu
+antidade from produtos where produto_codigo = '6234';
+ quantidade
+------------
+ 01/01/24
+(1 registro)
+
+
+restaurante=# select produto_estoque->->>'ultima_compra' as Última_Compra fr
+om produtos where produto_codigo = '6234';
+ERRO:  operador não existe: json ->->> unknown
+LINHA 1: select produto_estoque->->>'ultima_compra' as éltima_Compra ...
+                               ^
+DICA:  No operator matches the given name and argument types. You might need to add explicit type casts.
+restaurante=# select produto_estoque->>'ultima_compra' as Última_Compra from
+ produtos where produto_codigo = '6234';
+ Última_compra
+---------------
+
+(1 registro)
+
+
+restaurante=# select produto_estoque->'ultima_compra' as Última_Compra from
+produtos where produto_codigo = '6234';
+ Última_compra
+---------------
+
+(1 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->>'ultima_compra' = '01/01/2024';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->'i
+nfo_estoque'->>'ultima_compra' = '01/01/2024';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' like '01/01/2024';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# select produto_estoque from produtos;;
+                                  produto_estoque
+
+-----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+ {"info_estoque":{"tem_estoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}
+(9 registros)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque';
+ERRO:  argumento do WHERE deve ser do tipo boolean, e não do tipo json
+LINHA 1: select produto_estoque from produtos where produto_estoque->...
+                                                    ^
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque' = true;
+ERRO:  operador não existe: json = boolean
+LINHA 1: ... from produtos where produto_estoque->'info_estoque' = true;
+                                                                 ^
+DICA:  No operator matches the given name and argument types. You might need to add explicit type casts.
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque' = 1;
+ERRO:  operador não existe: json = integer
+LINHA 1: ...que from produtos where produto_estoque->'info_estoque' = 1;
+                                                                    ^
+DICA:  No operator matches the given name and argument types. You might need to add explicit type casts.
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->'ultima_compra' = '01/01/2024';
+ERRO:  operador não existe: json = unknown
+LINHA 1: ... produto_estoque->'info_estoque'->'ultima_compra' = '01/01/2...
+                                                              ^
+DICA:  No operator matches the given name and argument types. You might need to add explicit type casts.
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' = '01/01/2024';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' = "01/01/2024";
+ERRO:  coluna "01/01/2024" não existe
+LINHA 1: ...oduto_estoque->'info_estoque'->>'ultima_compra' = "01/01/202...
+                                                              ^
+restaurante=#
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' = '"01/01/2024"';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# insert    into    produtos(produto_codigo,
+restaurante(#
+
+                        produto_nome,
+restaurante(#
+
+                        produto_valor,
+restaurante(#
+
+                        produto_situacao,
+restaurante(#
+
+                        data_criacao,
+restaurante(#
+
+                        data_atualizacao,
+restaurante(#
+
+                        produto_categoria,
+restaurante(#
+
+                        produto_estoque)
+restaurante-#
+                        values('77978',
+restaurante(#
+
+'GATORADE',
+restaurante(#
+
+6,
+restaurante(#
+
+'A',
+restaurante(#
+
+'01/01/2016',
+restaurante(#
+
+'01/01/2016',
+restaurante(#
+
+'{"ISOTONICO",
+restaurante'#
+
+                "GARRAFA",
+restaurante'#
+
+                "BEBIDA"        }',
+restaurante(#
+
+'{      "info_estoque":
+restaurante'#
+
+                        {       "tem_estoque":  "SIM",
+restaurante'#
+
+                                        "quantidade":   17,
+restaurante'#
+
+                                        "ultima_compra":        "01/01/16"},
+restaurante'#
+
+                                "ultima_venda": "02/01/2016"
+restaurante'#
+
+        }'
+restaurante(#
+
+);
+INSERT 0 1
+restaurante=# select produto_estoque from produtos where produto_estoque->>'
+ultima_venda' = '02/01/2016'
+restaurante-# select produto_estoque from produtos where produto_estoque->>'ultima_venda' = '02/01/2016';
+ERRO:  erro de sintaxe em ou próximo a "select"
+LINHA 2: select produto_estoque from produtos where produto_estoque->...
+         ^
+restaurante=# select produto_estoque from produtos where produto_estoque->>'ultima_venda' = '02/01/2016';
+
+                                  produto_estoque
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {       "info_estoque":
+
+
+       +
+
+
+                         {       "tem_estoque":  "SIM",
+       +
+
+
+                                         "quantidade":   17,
+       +
+
+
+                                         "ultima_compra":        "01/01/16"     },+
+
+
+                                 "ultima_venda": "02/01/2016"
+       +
+
+
+         }
+(1 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->>'ultima_venda' = '01/01/2024';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->>'ultima_compra' = '01/01/2024';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->>'ultima_compra' = '01/01/16';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' = '01/01/16';
+
+                                  produto_estoque
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {       "info_estoque":
+
+
+       +
+
+
+                         {       "tem_estoque":  "SIM",
+       +
+
+
+                                         "quantidade":   17,
+       +
+
+
+                                         "ultima_compra":        "01/01/16"     },+
+
+
+                                 "ultima_venda": "02/01/2016"
+       +
+
+
+         }
+(1 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' = '01/01/24';
+                                  produto_estoque
+
+-----------------------------------------------------------------------------------
+ {"info_estoque":{"tem_estoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}
+(1 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' = "01/01/24";
+ERRO:  coluna "01/01/24" não existe
+LINHA 1: ...oduto_estoque->'info_estoque'->>'ultima_compra' = "01/01/24"...
+                                                              ^
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' = '"01/01/24"';
+ produto_estoque
+-----------------
+(0 registro)
+
+
+restaurante=# select produto_estoque from produtos where produto_estoque->'info_estoque'->>'ultima_compra' = '01/01/24';
+                                  produto_estoque
+
+-----------------------------------------------------------------------------------
+ {"info_estoque":{"tem_estoque":"SIM","quantidade":17,"ultima_compra":"01/01/24"}}
+(1 registro)
+
+
+restaurante=#
